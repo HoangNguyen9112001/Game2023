@@ -1,0 +1,10 @@
+- Tên Game: Monster Survivor
+- Thể loại: Nhập vai bắn súng
+- Đối tượng người chơi: Người dùng từ 10 tuổi
+- Gameplay: 
+	+ Mô tả: Người chơi sẽ được hóa thân thành một nhân vật trong game, sử dụng các vũ khí để tiêu diệt những kẻ địch được sinh ra liên tục trong 1 khoảng thời gian xác định
+		 Độ khó sẽ được tăng lên qua thời gian chơi và qua các màn chơi.
+		 Kẻ địch khi bị tiêu diệt, có thể rớt ra những vật phẩm làm tăng khả năng chiến đấu của người chơi như: máu, power-ups, Vàng...
+		 Vũ khí được sử dụng trong game: Kiếm, súng ngắn, súng shot-gun,...Những loại vũ khí này có thể được nâng cấp trong cửa hàng bởi vàng mà người chơi thu thập được
+	+ Góc nhìn: Góc nhìn thứ 3 từ trên xuống
+	+ Điều khiển: Các phím WASD để di chuyển nhân vật theo các hướng, click chuột để sử dụng vũ khí tiêu diệt kẻ địch
