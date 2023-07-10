@@ -36,4 +36,8 @@ public:
 	int GetWidth();
 	int GetHeight();
 	void MoveLeft(float deltaTime);
+	void MoveRight(float deltaTime);
+	void MoveUp(float deltaTime);
+	void MoveDown(float deltaTime);
+
 };

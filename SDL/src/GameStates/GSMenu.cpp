@@ -15,7 +15,7 @@ GSMenu::~GSMenu()
 void GSMenu::Init()
 {
 	//auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
-	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_main_menu.tga");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_menu.tga");
 
 	// background
 	//auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");

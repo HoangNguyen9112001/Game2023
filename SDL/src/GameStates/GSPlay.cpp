@@ -19,7 +19,7 @@ GSPlay::~GSPlay()
 void GSPlay::Init()
 {
 	//auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
-	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_play1.tga");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_city.png");
 
 	// background
 	
@@ -38,11 +38,11 @@ void GSPlay::Init()
 	m_listButton.push_back(button);
 
    // Animation 
-	texture = ResourceManagers::GetInstance()->GetTexture("Actor1_2.tga");
+	texture = ResourceManagers::GetInstance()->GetTexture("player.png");
 	obj = std::make_shared<SpriteAnimation>( texture, 2, 9, 6, 0.2f);
 	obj->SetFlip(SDL_FLIP_HORIZONTAL);
-	obj->SetSize(40, 50);
-	obj->Set2DPosition(240, 400);
+	obj->SetSize(50, 60);
+	obj->Set2DPosition(200, 200);
 	
 	//Camera::GetInstance()->SetTarget(obj);
 	m_listAnimation.push_back(obj);
@@ -152,9 +152,28 @@ void GSPlay::Update(float deltaTime)
 		if (m_KeyPress == 1)
 		{
 			
-			//it->MoveLeft(deltaTime);
+			it->MoveLeft(deltaTime);
 		}
 		it->Update(deltaTime);
+		if (m_KeyPress == 2)
+		{
+			
+			it->MoveDown(deltaTime);
+		}
+		it->Update(deltaTime);
+		if (m_KeyPress == 4)
+		{
+
+			it->MoveRight(deltaTime);
+		}
+		it->Update(deltaTime);
+		if (m_KeyPress == 8)
+		{
+
+			it->MoveUp(deltaTime);
+		}
+		it->Update(deltaTime);
+
 	}
 
 	//Update position of camera
