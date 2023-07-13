@@ -4,6 +4,7 @@
 #include "GameObject/MouseButton.h"
 #include "GameObject/SpriteAnimation.h"
 #include "GameObject/Camera.h"
+#include "GSMenu.h"
 
 
 GSPlay::GSPlay()
@@ -15,6 +16,10 @@ GSPlay::~GSPlay()
 {
 }
 
+//void GSPlay::Initializations()
+//{
+//	waveSpawner.Init();
+//}
 
 void GSPlay::Init()
 {
@@ -39,13 +44,32 @@ void GSPlay::Init()
 
    // Animation 
 	texture = ResourceManagers::GetInstance()->GetTexture("player.png");
-	obj = std::make_shared<SpriteAnimation>( texture, 2, 24, 8, 0.2f);
+	obj = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
 	obj->SetFlip(SDL_FLIP_HORIZONTAL);
-	obj->SetSize(60, 70);
-	obj->Set2DPosition(200, 200);
+	obj->SetSize(100, 100);
+	obj->Set2DPosition(350, 400);
+
+	m_listAnimation.push_back(obj);
+
+	
+
+	//for (int i = 0; i < 50; i++) {
+
+	//	texture = ResourceManagers::GetInstance()->GetTexture("logo2.png");
+	//	obj = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
+	//	obj->SetFlip(SDL_FLIP_HORIZONTAL);
+	//	obj->SetSize(40, 50);
+	//	obj->Set2DPosition(rand() % 500, rand() % 500);
+
+	//	m_listAnimation.push_back(obj);
+	//}
+
+	
+
+	
 	
 	//Camera::GetInstance()->SetTarget(obj);
-	m_listAnimation.push_back(obj);
+	
 
 	m_KeyPress = 0;
 }
@@ -95,7 +119,7 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 		}
 
 	}
-	////Key Up
+	//Key Up
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 	{
 		//Adjust the velocity
@@ -135,6 +159,8 @@ void GSPlay::HandleMouseMoveEvents(int x, int y)
 {
 }
 
+
+float time1 = 0.0f;
 void GSPlay::Update(float deltaTime)
 {
 	switch (m_KeyPress)//Handle Key event
@@ -176,6 +202,22 @@ void GSPlay::Update(float deltaTime)
 
 	}
 
+
+	time1 += deltaTime;
+
+	if (time1 >= 1.5f)
+	{
+		for (int i = 0; i < 1; i++) {
+
+			auto texture = ResourceManagers::GetInstance()->GetTexture("player.png");
+			obj = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
+			obj->SetFlip(SDL_FLIP_HORIZONTAL);
+			obj->SetSize(40, 50);
+			obj->Set2DPosition(rand() % 500, rand() % 500);
+
+			m_listAnimation.push_back(obj);
+		}
+	}
 	//Update position of camera
 	//Camera::GetInstance()->Update(deltaTime);
 	//obj->Update(deltaTime);
@@ -189,9 +231,14 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	{
 		it->Draw(renderer);
 	}
-//	obj->Draw(renderer);
-	for (auto it : m_listAnimation)
-	{
-		it->Draw(renderer);
-	}
+	//obj->Draw(renderer);
+	
+		for (auto it : m_listAnimation)
+		{
+
+			it->Draw(renderer);
+	
+		}
+	
+	
 }
