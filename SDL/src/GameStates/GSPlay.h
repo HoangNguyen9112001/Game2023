@@ -25,13 +25,15 @@ public:
 	void	Update(float deltaTime) override;
 	void	Draw(SDL_Renderer* renderer) override;
 	int m_KeyPress;
-
+	void	AutoMove(std::shared_ptr<SpriteAnimation> obj);
+	int m_enemySpeed;
+	int main_heal = 100, e_heal = 50;
 private:
 	std::shared_ptr<Sprite2D>	m_background;
 	//std::shared_ptr<Text>		m_score;
 	std::list<std::shared_ptr<MouseButton>>	m_listButton;
-	std::list<std::shared_ptr<SpriteAnimation>>	m_listAnimation;
-	std::shared_ptr<SpriteAnimation> obj;
+	std::list<std::shared_ptr<SpriteAnimation>>	m_listAnimation, m_listEnemies;
+	std::shared_ptr<SpriteAnimation> obj, enemy;
 	std::shared_ptr<MouseButton> button;
 
 //	EnemyWaveSpawner waveSpawner;

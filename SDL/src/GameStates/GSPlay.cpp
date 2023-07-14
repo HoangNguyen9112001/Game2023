@@ -1,4 +1,4 @@
-#include "GSPlay.h"
+﻿#include "GSPlay.h"
 #include "GameObject/TextureManager.h"
 #include "GameObject/Sprite2D.h"
 #include "GameObject/MouseButton.h"
@@ -7,6 +7,15 @@
 #include "GSMenu.h"
 
 
+// tính khoảng cách giữa hai điểm
+float distance(float x1, float y1, float x2, float y2) {
+	return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
+
+// check VAR
+bool intersect(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2) {
+	return !(x1 > x2 + w2 || x1 + w1 < x2 || y1 > y2 + h2 || y1 + h1 < y2);
+}
 GSPlay::GSPlay()
 {
 }
@@ -210,12 +219,29 @@ void GSPlay::Update(float deltaTime)
 		for (int i = 0; i < 1; i++) {
 
 			auto texture = ResourceManagers::GetInstance()->GetTexture("player.png");
-			obj = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
-			obj->SetFlip(SDL_FLIP_HORIZONTAL);
-			obj->SetSize(40, 50);
-			obj->Set2DPosition(rand() % 500, rand() % 500);
+			enemy = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
+			enemy->SetFlip(SDL_FLIP_HORIZONTAL);
+			enemy->SetSize(40, 50);
+			enemy->Set2DPosition(rand() % 500, rand() % 500);
 
-			m_listAnimation.push_back(obj);
+			m_listEnemies.push_back(enemy);
+		}
+		for (auto enemy : m_listEnemies) {
+			GSPlay::AutoMove(enemy);
+
+			//check VAR
+			if (intersect(obj->Get2DPosition().x, obj->Get2DPosition().y, obj->GetWidth(), obj->GetHeight(),
+				enemy->Get2DPosition().x, enemy->Get2DPosition().y, enemy->GetWidth(), enemy->GetHeight())) {
+				main_heal -= 50;
+				e_heal -= 50;
+			}
+
+			//delete enemy
+			if (e_heal <= 0) {
+				enemy.reset();
+				continue;
+			}
+			enemy->Update(deltaTime);
 		}
 	}
 	//Update position of camera
@@ -239,6 +265,29 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 			it->Draw(renderer);
 	
 		}
+		for (auto it : m_listEnemies) {
+			it->Draw(renderer);
+		}
 	
+}
+
+void GSPlay::AutoMove(std::shared_ptr<SpriteAnimation> e) {
+
+	m_enemySpeed = rand() % 3 + 1;
+	//tinh go'c giua enemy vs palyer
+	float angle = atan2(obj->Get2DPosition().y - e->Get2DPosition().y, obj->Get2DPosition().x - e->Get2DPosition().x);
+	//tinh khoang cach
+	float dist = distance(obj->Get2DPosition().x, obj->Get2DPosition().y, e->Get2DPosition().x, e->Get2DPosition().y);
+
+	if (dist > 10)
+	{
+		float a = e->Get2DPosition().x;
+		a += cos(angle) * m_enemySpeed;
+		float b = e->Get2DPosition().y;
+		b += sin(angle) * m_enemySpeed;
+
+		e->Set2DPosition(a, b);
+		dist = distance(obj->Get2DPosition().x, obj->Get2DPosition().y, a, b);
+	}
 	
 }
