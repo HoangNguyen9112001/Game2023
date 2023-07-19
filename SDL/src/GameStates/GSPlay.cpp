@@ -52,10 +52,10 @@ void GSPlay::Init()
 	m_listButton.push_back(button);
 
    // Animation 
-	texture = ResourceManagers::GetInstance()->GetTexture("player.png");
-	obj = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
+	texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
+	obj = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
 	obj->SetFlip(SDL_FLIP_HORIZONTAL);
-	obj->SetSize(100, 100);
+	obj->SetSize(60	, 80);
 	obj->Set2DPosition(350, 400);
 
 	m_listAnimation.push_back(obj);
