@@ -1,6 +1,7 @@
 #include "GSOption.h"
 #include "GameObject/TextureManager.h"
 #include "GameObject/MouseButton.h"
+#include "GSMenu.h"
 
 GSOption::GSOption()
 	: GameStateBase(StateType::STATE_OPTION), opt_bg(nullptr), opt_bt(std::list<std::shared_ptr<MouseButton>>{})
@@ -27,7 +28,7 @@ void GSOption::Init()
 	opt_bt.push_back(button);
 
 	//menu option 
-	menu_opt = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("khung opt.png"), SDL_FLIP_NONE);
+	menu_opt = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("menu_opt.png"), SDL_FLIP_NONE);
 	menu_opt->SetSize(700, 500);
 	menu_opt->Set2DPosition((SCREEN_WIDTH - menu_opt->GetWidth()) / 2, (SCREEN_HEIDHT - menu_opt->GetHeight()) / 2);
 
@@ -37,9 +38,8 @@ void GSOption::Init()
 	music_on_bt->Set2DPosition((SCREEN_WIDTH - menu_opt->GetWidth()) / 2 + menu_opt->GetWidth() / 3 - music_on_bt->GetWidth()/2,
 								(SCREEN_HEIDHT - menu_opt->GetHeight())/2 + menu_opt->GetHeight() / 3);
 	music_on_bt->SetOnClick([this]() {
-		
+		Mix_Resume(-1);
 		});
-	opt_bt.push_back(button);
 	opt_bt.push_back(music_on_bt);
 
 	music_off_bt = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_music_off.tga"), SDL_FLIP_NONE);
@@ -47,7 +47,7 @@ void GSOption::Init()
 	music_off_bt->Set2DPosition((SCREEN_WIDTH - menu_opt->GetWidth()) / 2 + menu_opt->GetWidth()* 2 / 3 - music_off_bt->GetWidth() / 2,
 								(SCREEN_HEIDHT - menu_opt->GetHeight()) / 2 + menu_opt->GetHeight() / 3);
 	music_off_bt->SetOnClick([this]() {
-		
+		&Sound::StopSound;
 		});
 	opt_bt.push_back(music_off_bt);
 
@@ -57,7 +57,7 @@ void GSOption::Init()
 	sfx_on_bt->Set2DPosition((SCREEN_WIDTH - menu_opt->GetWidth()) / 2 + menu_opt->GetWidth() / 3 - sfx_on_bt->GetWidth() / 2,
 		(SCREEN_HEIDHT - menu_opt->GetHeight()) / 2 + menu_opt->GetHeight() * 2 / 3 - sfx_on_bt->GetHeight() * 2 / 3);
 	sfx_on_bt->SetOnClick([this]() {
-
+		
 		});
 	opt_bt.push_back(sfx_on_bt);
 
@@ -72,9 +72,11 @@ void GSOption::Init()
 }
 void	GSOption::Exit()
 {
+	
 }
 void	GSOption::Pause() 
 {
+	
 }
 void	GSOption::Resume()
 {

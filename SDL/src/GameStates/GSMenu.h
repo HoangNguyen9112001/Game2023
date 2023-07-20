@@ -32,7 +32,7 @@ private:
 	TTF_Font*  m_Font;
 	std::shared_ptr<Sound>					m_Sound;
 	std::shared_ptr<MouseButton> btnCredit;
-	int score = 0;
+	int  sscore = 0;
 	std::list<std::shared_ptr<SpriteAnimation>>	m_listAnimation;
 	std::shared_ptr<SpriteAnimation> obj;
 };

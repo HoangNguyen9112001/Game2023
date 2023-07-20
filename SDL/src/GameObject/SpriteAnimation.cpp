@@ -82,18 +82,18 @@ int SpriteAnimation::GetHeight()
 
 void SpriteAnimation::MoveLeft(float deltaTime)
 {
-	m_position.x -= 60 * deltaTime;
+	m_position.x -= 100 * deltaTime;
 }
 
 void SpriteAnimation::MoveRight(float deltaTime)
 {
-	m_position.x += 60 * deltaTime;
+	m_position.x += 100 * deltaTime;
 }
 void SpriteAnimation::MoveUp(float deltaTime)
 {
-	m_position.y -= 60 * deltaTime;
+	m_position.y -= 100 * deltaTime;
 }
 void SpriteAnimation::MoveDown(float deltaTime)
 {
-	m_position.y += 60 * deltaTime;
+	m_position.y += 100 * deltaTime;
 }
