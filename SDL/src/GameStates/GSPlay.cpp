@@ -50,6 +50,7 @@ void GSPlay::Init()
 		});
 	m_listButton.push_back(button);
 
+<<<<<<< HEAD
 	// Pause button
 	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_pause.tga"), SDL_FLIP_NONE);
 	button->SetSize(60, 60);
@@ -62,8 +63,13 @@ void GSPlay::Init()
    // Player
 	texture = ResourceManagers::GetInstance()->GetTexture("player.png");
 	obj = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
+=======
+   // Animation 
+	texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
+	obj = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
+>>>>>>> 31bb29e8449bcfe969e8ee29ae5cb845358ded2d
 	obj->SetFlip(SDL_FLIP_HORIZONTAL);
-	obj->SetSize(100, 100);
+	obj->SetSize(60	, 80);
 	obj->Set2DPosition(350, 400);
 	m_listAnimation.push_back(obj);
 
