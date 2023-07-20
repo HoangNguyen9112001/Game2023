@@ -50,7 +50,7 @@ void GSPlay::Init()
 		});
 	m_listButton.push_back(button);
 
-<<<<<<< HEAD
+
 	// Pause button
 	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_pause.tga"), SDL_FLIP_NONE);
 	button->SetSize(60, 60);
@@ -63,11 +63,11 @@ void GSPlay::Init()
    // Player
 	texture = ResourceManagers::GetInstance()->GetTexture("player.png");
 	obj = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
-=======
+
    // Animation 
 	texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
 	obj = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
->>>>>>> 31bb29e8449bcfe969e8ee29ae5cb845358ded2d
+
 	obj->SetFlip(SDL_FLIP_HORIZONTAL);
 	obj->SetSize(60	, 80);
 	obj->Set2DPosition(350, 400);
@@ -240,7 +240,7 @@ void GSPlay::Update(float deltaTime)
 	default:
 		break;
 	}
-	
+
 	for (auto it : m_listButton)
 	{
 		it->Update(deltaTime);
@@ -255,7 +255,7 @@ void GSPlay::Update(float deltaTime)
 		it->Update(deltaTime);
 		if (m_KeyPress == 2)
 		{
-			
+
 			it->MoveDown(deltaTime);
 		}
 		it->Update(deltaTime);
@@ -278,24 +278,23 @@ void GSPlay::Update(float deltaTime)
 	time1 += deltaTime;
 
 
-		
-		for (auto enemy : m_listEnemies) {
-			GSPlay::EnemyAutoMove(enemy);
 
-			//check VAR
-			if (intersect(obj->Get2DPosition().x, obj->Get2DPosition().y, obj->GetWidth(), obj->GetHeight(),
-				enemy->Get2DPosition().x, enemy->Get2DPosition().y, enemy->GetWidth(), enemy->GetHeight())) {
-				main_heal -= 50;
-				e_heal -= 50;
-			}
+	for (auto it : m_listEnemies) {
+		GSPlay::EnemyAutoMove(it);
 
-			//delete enemy
-			if (e_heal <= 0) {
-				enemy.reset();
-				continue;
-			}
-			enemy->Update(deltaTime);
+		//check VAR
+		if (intersect(obj->Get2DPosition().x, obj->Get2DPosition().y, obj->GetWidth(), obj->GetHeight(),
+			it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight())) {
+			it->alive = false;
 		}
+
+		//delete enemy
+		/*if (e_heal <= 0) {
+			enemy.reset();
+			continue;
+		}*/
+		enemy->Update(deltaTime);
+	}
 
 	//Update position of camera
 	//Camera::GetInstance()->Update(deltaTime);
@@ -324,6 +323,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 
 	for (auto it : m_listEnemies)
 	{
+		if(it->alive)
 		it->Draw(renderer);
 	}
 

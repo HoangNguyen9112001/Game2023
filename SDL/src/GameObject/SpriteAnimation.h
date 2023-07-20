@@ -40,4 +40,5 @@ public:
 	void MoveUp(float deltaTime);
 	void MoveDown(float deltaTime);
 
+	bool alive = true;
 };
