@@ -30,15 +30,35 @@ GSPlay::~GSPlay()
 //	waveSpawner.Init();
 //}
 
+
 void GSPlay::Init()
 {
 	//auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D.nfg");
 
 	//background
+
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_city.png");
 	m_background = std::make_shared<Sprite2D>( texture, SDL_FLIP_NONE);
 	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIDHT);
 	m_background->Set2DPosition(0, 0);
+
+	// heart icon
+	texture = ResourceManagers::GetInstance()->GetTexture("heart.tga");
+	m_heartIcon = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	m_heartIcon->Set2DPosition(50, 50);
+	m_heartIcon->SetSize(50, 50);
+	m_heartIcons.push_back(m_heartIcon);
+
+
+	m_heartIcon = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	m_heartIcon->Set2DPosition(100, 50);
+	m_heartIcon->SetSize(50, 50);
+	m_heartIcons.push_back(m_heartIcon);
+
+	m_heartIcon = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	m_heartIcon->Set2DPosition(150, 50);
+	m_heartIcon->SetSize(50, 50);
+	m_heartIcons.push_back(m_heartIcon);
 
 	// Close button
 	texture = ResourceManagers::GetInstance()->GetTexture("btn_close.tga");
@@ -248,6 +268,7 @@ void GSPlay::HandleMouseMoveEvents(int x, int y)
 }
 
 
+
 //float time1 = 0.0f;
 void GSPlay::Update(float deltaTime)
 {
@@ -383,6 +404,21 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	gold->Draw(renderer);
 	money->Draw(renderer);
 	weapon->Draw(renderer);
+
+	//Draw heart
+	if (playerHealth > 0)
+	{
+		m_heartIcons[0]->Draw(renderer);
+	}
+	if (playerHealth > 1)
+	{
+		m_heartIcons[1]->Draw(renderer);
+	}
+	if (playerHealth > 2)
+	{
+		m_heartIcons[2]->Draw(renderer);
+	}
+
 	
 	//Render Button
 	for (auto it : m_listButton)

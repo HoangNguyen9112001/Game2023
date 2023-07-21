@@ -30,6 +30,7 @@ public:
 
 	int m_enemySpeed;
 
+	int playerHealth = 3;
 	int playerDirection = -1;
 	double weaponAngle = 0;
 	int m_KeyPress;
@@ -50,6 +51,8 @@ private:
 	std::shared_ptr<Text>		m_score;
 	std::shared_ptr<Text>		score;
 	std::shared_ptr<Text>		money;
+	std::shared_ptr<Sprite2D>	m_heartIcon;
+	std::vector<std::shared_ptr<Sprite2D>> m_heartIcons;
 
 
 	SDL_Color m_textColor;
