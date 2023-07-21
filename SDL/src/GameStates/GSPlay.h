@@ -27,14 +27,17 @@ public:
 	void	Update(float deltaTime) override;
 	void	Draw(SDL_Renderer* renderer) override;
 	void	EnemyAutoMove(std::shared_ptr<SpriteAnimation> obj);
-	void	Shoot();
 
 	int m_enemySpeed;
-	int main_heal = 100, e_heal = 50;
+
 	int playerDirection = -1;
-	double weaponAngle = 1;
+	double weaponAngle = 0;
 	int m_KeyPress;
 	int m_bullet_speed;
+	int m_MouseMotion;
+	int characterDirection;
+	int bullet_offset_x = 30;
+	int bullet_offset_y = 28;
 
 private:
 	double scores, golds;

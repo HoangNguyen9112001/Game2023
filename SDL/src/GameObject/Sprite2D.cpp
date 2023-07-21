@@ -64,6 +64,10 @@ void Sprite2D::SetRotation(double angle)
 	m_angle = angle;
 }
 
+double Sprite2D::GetRotation()
+{
+	return m_angle;
+}
 void Sprite2D::SetFlip(SDL_RendererFlip flip)
 {
 	m_flip = flip;

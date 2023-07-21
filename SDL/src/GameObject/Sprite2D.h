@@ -15,13 +15,15 @@ public:
 	void Draw(SDL_Renderer * renderer) override;
 
 	void Update(float deltatime) override;
-	void Set2DPosition(float x, float y);
+	void		Set2DPosition(float x, float y);
 	Vector3		Get2DPosition();
-	void SetSize(int width, int height);
-	int GetWidth();
-	int GetHeight();
-	void SetRotation(double angle);
-	void SetFlip(SDL_RendererFlip flip);
-	bool active = true;
+	void		SetSize(int width, int height);
+	int			GetWidth();
+	int			GetHeight();
+	void		SetRotation(double angle);
+	double		GetRotation();
+	void		SetFlip(SDL_RendererFlip flip);
+
+	bool bullet_active = true;
 };
 
