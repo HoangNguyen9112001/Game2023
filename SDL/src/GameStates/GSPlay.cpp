@@ -384,9 +384,12 @@ void GSPlay::Update(float deltaTime)
 		if (intersect(bullet->Get2DPosition().x, bullet->Get2DPosition().y, bullet->GetWidth(), bullet->GetHeight(),
 			it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight()))
 		{
-
 			it->alive = false;
 
+		}
+		if (intersect(player->Get2DPosition().x, player->Get2DPosition().y, player->GetWidth(), player->GetHeight(),
+			it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight())) {
+			playerHealth--;
 		}
 		enemy->Update(deltaTime);
 	}
