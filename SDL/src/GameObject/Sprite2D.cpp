@@ -73,3 +73,13 @@ void Sprite2D::SetFlip(SDL_RendererFlip flip)
 	m_flip = flip;
 }
 
+void Sprite2D::SetBulletActive(bool isActive)
+{
+	m_isBulletActive = isActive;
+}
+
+bool Sprite2D::GetBulletActive()
+{
+	return m_isBulletActive;
+}
+

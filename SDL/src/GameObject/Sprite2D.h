@@ -7,7 +7,7 @@ protected:
 	int m_iWidth;
 	int m_iHeight;
 	SDL_RendererFlip m_flip;
-
+	bool m_isBulletActive = false;
 public:
 	Sprite2D() : BaseObject(), m_iWidth(0), m_iHeight(0) {}
 	Sprite2D( std::shared_ptr<TextureManager> texture, SDL_RendererFlip flip);
@@ -23,7 +23,8 @@ public:
 	void		SetRotation(double angle);
 	double		GetRotation();
 	void		SetFlip(SDL_RendererFlip flip);
-
-	bool bullet_active = true;
+	void SetBulletActive(bool isActive);
+	bool GetBulletActive();
+	
 };
 

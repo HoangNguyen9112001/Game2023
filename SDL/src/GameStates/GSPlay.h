@@ -33,7 +33,7 @@ public:
 	int playerDirection = -1;
 	double weaponAngle = 0;
 	int m_KeyPress;
-	int m_bullet_speed;
+	int m_bullet_speed = 20;
 	int m_MouseMotion;
 	int characterDirection;
 	int bullet_offset_x = 30;

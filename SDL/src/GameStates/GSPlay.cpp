@@ -90,8 +90,8 @@ void GSPlay::Init()
 	{
 		bullet = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("gold_icon.png"), SDL_FLIP_NONE);
 		bullet->SetSize(10, 10);
-		bullet->Set2DPosition(weapon->GetPosition().x + weapon->GetWidth() / 2, weapon->GetPosition().y + weapon->GetHeight() / 2);
-		bullet->bullet_active = true;
+		//bullet->Set2DPosition(weapon->GetPosition().x + weapon->GetWidth() / 2, weapon->GetPosition().y + weapon->GetHeight() / 2);
+		bullet->SetBulletActive(false);// = false;
 		m_listBullets.push_back(bullet);
 	}
 
@@ -211,22 +211,22 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 		weaponAngle = atan2(e.motion.y - weapon->Get2DPosition().y, e.motion.x - weapon->Get2DPosition().x) * 180 / M_PI;
 		break;
 		//Bullet fly
-	/*case SDL_MOUSEBUTTONDOWN:
+	case SDL_MOUSEBUTTONDOWN:
 		if (e.button.button == SDL_BUTTON_LEFT)
 		{
 			for (auto it : m_listBullets)
 			{
-				if (!it->bullet_active)
+				if (!it->GetBulletActive())
 				{	
 					it->Set2DPosition(weapon->Get2DPosition().x + weapon->GetWidth() / 2,
 									weapon->Get2DPosition().y + weapon->GetHeight() / 2);
 					it->SetRotation(weaponAngle);
-					it->bullet_active;
+					it->SetBulletActive(true);
 
 				}
 			}
 		}
-		*/
+		
 	}
 }
 
@@ -248,7 +248,7 @@ void GSPlay::HandleMouseMoveEvents(int x, int y)
 }
 
 
-float time1 = 0.0f;
+//float time1 = 0.0f;
 void GSPlay::Update(float deltaTime)
 {
 	switch (m_KeyPress)//Handle Key event
@@ -331,7 +331,7 @@ void GSPlay::Update(float deltaTime)
 	for (auto it : m_listBullets)
 	{
 		//shoot
-		if (it->bullet_active)
+		if (it->GetBulletActive())
 		{
 			float x = it->Get2DPosition().x,
 				  y = it->Get2DPosition().y;
@@ -339,25 +339,28 @@ void GSPlay::Update(float deltaTime)
 			y += m_bullet_speed * sin(it->GetRotation() * M_PI / 180);
 
 			it->Set2DPosition(x, y);
-
+			// Collision with screen
 			if (it->Get2DPosition().x < 0 || it->Get2DPosition().x > SCREEN_WIDTH || it->Get2DPosition().y < 0 || it->Get2DPosition().y > SCREEN_HEIDHT)
 			{
-				it->bullet_active = false;
+				it->SetBulletActive(false);
 			}
+			// collision with enemy
 			if (intersect(enemy->Get2DPosition().x, enemy->Get2DPosition().y, enemy->GetWidth(), enemy->GetHeight(),
-				it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight())) {
-				it->bullet_active = false;
+				it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight()))
+			{
+				it->SetBulletActive(false);
 			}
+			it->Update(deltaTime);
 		}
 	}
-	time1 += deltaTime;
+	//time1 += deltaTime;
 
 	//Update Enemy
 	for (auto it : m_listEnemies) {
 		GSPlay::EnemyAutoMove(it);
 
 		//check VAR
-		if (intersect(weapon->Get2DPosition().x, weapon->Get2DPosition().y, weapon->GetWidth(), weapon->GetHeight(),
+		if (intersect(bullet->Get2DPosition().x, bullet->Get2DPosition().y, bullet->GetWidth(), bullet->GetHeight(),
 			it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight()))
 		{
 
@@ -405,7 +408,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	//Render Bullet
 	for (auto it : m_listBullets)
 	{
-		if (it->bullet_active)
+		if (it->GetBulletActive())
 			it->Draw(renderer);
 	}
 
