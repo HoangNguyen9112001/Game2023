@@ -22,8 +22,6 @@ public:
 	int GetHeight();
 	void SetRotation(double angle);
 	void SetFlip(SDL_RendererFlip flip);
-
-
-
+	bool active = true;
 };
 

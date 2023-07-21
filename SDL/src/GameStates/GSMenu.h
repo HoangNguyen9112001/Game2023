@@ -34,5 +34,5 @@ private:
 	std::shared_ptr<MouseButton> btnCredit;
 	int  sscore = 0;
 	std::list<std::shared_ptr<SpriteAnimation>>	m_listAnimation;
-	std::shared_ptr<SpriteAnimation> obj;
+	std::shared_ptr<SpriteAnimation> player;
 };

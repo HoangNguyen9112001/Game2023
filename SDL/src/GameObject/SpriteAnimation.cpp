@@ -94,6 +94,6 @@ void SpriteAnimation::MoveUp(float deltaTime)
 	m_position.y -= 100 * deltaTime;
 }
 void SpriteAnimation::MoveDown(float deltaTime)
-{
+{	
 	m_position.y += 100 * deltaTime;
 }

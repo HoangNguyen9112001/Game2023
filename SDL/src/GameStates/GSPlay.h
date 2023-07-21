@@ -27,23 +27,39 @@ public:
 	void	Update(float deltaTime) override;
 	void	Draw(SDL_Renderer* renderer) override;
 	void	EnemyAutoMove(std::shared_ptr<SpriteAnimation> obj);
-
+	void	Shoot();
 
 	int m_enemySpeed;
 	int main_heal = 100, e_heal = 50;
 	int playerDirection = -1;
-	double weaponAngle = 0;
+	double weaponAngle = 1;
 	int m_KeyPress;
+	int m_bullet_speed;
 
 private:
-	std::string scores, golds;
-	std::shared_ptr<Sprite2D>	m_background, gold, weapon;
-	std::shared_ptr<Text>		m_score, score, money;
+	double scores, golds;
+
+	std::shared_ptr<Sprite2D>	m_background;
+	std::shared_ptr<Sprite2D>	gold;
+	std::shared_ptr<Sprite2D>	weapon;
+	std::shared_ptr<Sprite2D>	bullet;
+
+	std::shared_ptr<Text>		m_score;
+	std::shared_ptr<Text>		score;
+	std::shared_ptr<Text>		money;
+
+
 	SDL_Color m_textColor;
-	std::list<std::shared_ptr<MouseButton>>	m_listButton;
-	std::list<std::shared_ptr<SpriteAnimation>>	m_listAnimation, m_listEnemies;
-	std::shared_ptr<SpriteAnimation> obj, enemy;
-	std::shared_ptr<MouseButton> button;
+
+	std::list<std::shared_ptr<Sprite2D>>		m_listBullets;
+	std::list<std::shared_ptr<MouseButton>>		m_listButton;
+	std::list<std::shared_ptr<SpriteAnimation>>	m_listAnimation;
+	std::list<std::shared_ptr<SpriteAnimation>>	m_listEnemies;
+
+	std::shared_ptr<SpriteAnimation>			player;
+	std::shared_ptr<SpriteAnimation>			enemy;
+
+	std::shared_ptr<MouseButton>				button;
 
 	float time = 0.0f;
 	float m_Velocity = 10.0f;
