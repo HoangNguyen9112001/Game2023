@@ -3,7 +3,7 @@
 #include "GameObject/MouseButton.h"
 #include"GameObject/Text.h"
 #include"Timer.h"
-//#include "../EnemyWaveSpawner.h"
+
 class Sprite2D;
 class SpriteAnimation;
 
@@ -34,23 +34,31 @@ public:
 	int playerDirection = -1;
 	double weaponAngle = 0;
 	int m_KeyPress;
+
 	int m_bullet_speed = 20;
 	int m_MouseMotion;
-	int characterDirection;
-	int bullet_offset_x = 30;
-	int bullet_offset_y = 28;
 
+	TTF_Font* m_font = TTF_OpenFont("Data/font2.ttf", 16);
+	int m_lastShootTime;
+	int m_shootDelay = 5;
+
+	void UpdateValue(int& value, int upd);
 private:
-	double scores, golds;
+	int scores = 0,
+		golds = 0;
+	int gold_cnt = 0,
+		score_cnt = 0;
+	int m_textwidth = 20,
+		m_textheight = 50;
 
 	std::shared_ptr<Sprite2D>	m_background;
-	std::shared_ptr<Sprite2D>	gold;
+	std::shared_ptr<Sprite2D>	m_gold;
 	std::shared_ptr<Sprite2D>	weapon;
 	std::shared_ptr<Sprite2D>	bullet;
 
 	std::shared_ptr<Text>		m_score;
 	std::shared_ptr<Text>		score;
-	std::shared_ptr<Text>		money;
+	std::shared_ptr<Text>		gold;
 	std::shared_ptr<Sprite2D>	m_heartIcon;
 	std::vector<std::shared_ptr<Sprite2D>> m_heartIcons;
 

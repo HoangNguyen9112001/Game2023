@@ -97,3 +97,13 @@ void SpriteAnimation::MoveDown(float deltaTime)
 {	
 	m_position.y += 100 * deltaTime;
 }
+
+void SpriteAnimation::SetEnemyAlive(bool m_EnemyLive)
+{
+	m_EnemyAlive = m_EnemyLive;
+}
+
+bool SpriteAnimation::GetEnemyLive()
+{
+	return m_EnemyAlive;
+}

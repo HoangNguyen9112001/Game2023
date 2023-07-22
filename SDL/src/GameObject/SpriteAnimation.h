@@ -19,6 +19,7 @@ protected:
 	int m_numAction; //start from 1,2,3...
 	//SDL_RendererFlip m_flip;
 	//std::shared_ptr<TextureManager> m_texture;
+	bool m_EnemyAlive = true;
 public:
 	SpriteAnimation(std::shared_ptr<TextureManager> texture, int spriteRow, int frameCount, int numAction, float  frameTime);
 	~SpriteAnimation();
@@ -40,5 +41,6 @@ public:
 	void MoveUp(float deltaTime);
 	void MoveDown(float deltaTime);
 
-	bool alive = true;
+	void SetEnemyAlive(bool m_EnemyAlive);
+	bool GetEnemyLive();
 };

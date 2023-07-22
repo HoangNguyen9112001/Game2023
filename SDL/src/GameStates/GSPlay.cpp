@@ -95,35 +95,36 @@ void GSPlay::Init()
 	
 	//SCORE
 	m_textColor = { 0, 0, 255 };
-	m_score = std::make_shared<Text>("Data/calibrili.ttf", m_textColor, 20);
+	m_score = std::make_shared<Text>("Data/font2.ttf", m_textColor, 20);
 	m_score->SetSize(75, 30);
 	m_score->Set2DPosition((SCREEN_WIDTH - m_score->GetWidth()) / 3, 45);
 	m_score->LoadFromRenderText("Score: ");
 	
-	score = std::make_shared<Text>("Data/calibrili.ttf", m_textColor, 20);
-	score->SetSize(20, 50);
+	score = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
+	//TTF_SizeText(m_font, std::to_string(scores).c_str(), &m_textwidth, &m_textheight);
+	score->SetSize(m_textwidth, m_textheight);
 	score->Set2DPosition(m_score->Get2DPosition().x + m_score->GetWidth() + 5, 30);
 	score->LoadFromRenderText(std::to_string(scores));
 
 	//Bullet
 	for (int i = 0; i < MAX_BULLETS; ++i)
 	{
-		bullet = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("gold_icon.png"), SDL_FLIP_NONE);
-		bullet->SetSize(10, 10);
-		//bullet->Set2DPosition(weapon->GetPosition().x + weapon->GetWidth() / 2, weapon->GetPosition().y + weapon->GetHeight() / 2);
+		bullet = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("bullet.png"), SDL_FLIP_NONE);
+		bullet->SetSize(20, 20);
 		bullet->SetBulletActive(false);// = false;
 		m_listBullets.push_back(bullet);
 	}
 
 	//gold
-	gold = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("gold_icon.png"), SDL_FLIP_NONE);
-	gold->SetSize(60, 60);
-	gold->Set2DPosition(score->Get2DPosition().x + score->GetWidth() + 50, 20);
+	m_gold = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("gold_icon.png"), SDL_FLIP_NONE);
+	m_gold->SetSize(60, 60);
+	m_gold->Set2DPosition(score->Get2DPosition().x + score->GetWidth() + 50, 20);
 
-	money = std::make_shared<Text>("Data/calibrili.ttf", m_textColor, 20);
-	money->SetSize(20, 50);
-	money->Set2DPosition(gold->Get2DPosition().x + gold->GetWidth() + 10, 30);
-	money->LoadFromRenderText(std::to_string(golds));
+	gold = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
+	//TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
+	gold->SetSize(m_textwidth, m_textheight);
+	gold->Set2DPosition(m_gold->Get2DPosition().x + m_gold->GetWidth() + 10, 30);
+	gold->LoadFromRenderText(std::to_string(golds));
 
 	//Guns shop
 	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("guns_shop_icon.png"), SDL_FLIP_HORIZONTAL);
@@ -135,14 +136,14 @@ void GSPlay::Init()
 	m_listButton.push_back(button);
 
 	//Enemies
-	for (int i = 0; i < MAX_ENEMIES; i++) {
+	for (int i = 0; i < MAX_ENEMIES; ++i) {
 
-		auto texture = ResourceManagers::GetInstance()->GetTexture("player.png");
-		enemy = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
-		enemy->SetFlip(SDL_FLIP_HORIZONTAL);
+		texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
+		enemy = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
+		enemy->SetFlip(SDL_FLIP_NONE);
 		enemy->SetSize(40, 50);
 		enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIDHT);
-
+		enemy->SetEnemyAlive(true);
 		m_listEnemies.push_back(enemy);
 	}
 
@@ -156,7 +157,6 @@ void GSPlay::Exit()
 {
 	
 }
-
 
 void GSPlay::Pause()
 {
@@ -236,20 +236,23 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 		{
 			for (auto it : m_listBullets)
 			{
-				if (!it->GetBulletActive())
-				{	
-					it->Set2DPosition(weapon->Get2DPosition().x + weapon->GetWidth() / 2,
-									weapon->Get2DPosition().y + weapon->GetHeight() / 2);
-					it->SetRotation(weaponAngle);
-					it->SetBulletActive(true);
-
+				int curentTime = SDL_GetTicks();
+				//create bullet
+				if (!it->GetBulletActive())//if no bullet active
+				{
+					if (curentTime - m_lastShootTime > m_shootDelay) {
+						it->Set2DPosition(weapon->Get2DPosition().x  + weapon->GetWidth() / 2,
+							weapon->Get2DPosition().y + weapon->GetHeight() / 2);
+						it->SetRotation(weaponAngle);
+						it->SetBulletActive(true);
+						m_lastShootTime = curentTime;
+					}
 				}
 			}
 		}
 		
 	}
 }
-
 
 void GSPlay::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 {
@@ -267,8 +270,6 @@ void GSPlay::HandleMouseMoveEvents(int x, int y)
 
 }
 
-
-
 //float time1 = 0.0f;
 void GSPlay::Update(float deltaTime)
 {
@@ -277,17 +278,17 @@ void GSPlay::Update(float deltaTime)
 	default:
 		break;
 	}
-
-	for (auto it : m_listButton)
+	//Update Button
+	for (auto& it : m_listButton)
 	{
 		it->Update(deltaTime);
 	}
 	//Update Player
-	for (auto it : m_listAnimation)
+	for (auto& it : m_listAnimation)
 	{
 		// Gun rotation
 		weapon = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("weaponR1.png"),
-											characterDirection == 1 ? SDL_FLIP_NONE : SDL_FLIP_VERTICAL);
+											playerDirection == 1 ? SDL_FLIP_NONE : SDL_FLIP_VERTICAL);
 		weapon->SetRotation(weaponAngle);
 		weapon->SetSize(50, 20);
 
@@ -308,7 +309,7 @@ void GSPlay::Update(float deltaTime)
 			}
 			else
 			{
-				characterDirection = -1;
+				playerDirection = -1;
 				it->MoveLeft(deltaTime);
 			}
 		}
@@ -330,7 +331,7 @@ void GSPlay::Update(float deltaTime)
 				player->Set2DPosition(SCREEN_WIDTH - player->GetWidth(), player->Get2DPosition().y);
 			}
 			else {
-				characterDirection = 1;
+				playerDirection = 1;
 				it->MoveRight(deltaTime);
 			}
 		}
@@ -347,56 +348,61 @@ void GSPlay::Update(float deltaTime)
 		it->Update(deltaTime);
 
 	}
-
+	//time1 += deltaTime;
+	//Update Enemy
+	for (auto& it : m_listEnemies) {
+		GSPlay::EnemyAutoMove(it);
+		// Collision with Bullet
+		if (it->GetEnemyLive()) { // if enemy is alive
+			for (auto& bul : m_listBullets)
+			{
+				if (bul->GetBulletActive()) // if bullet is flying
+				{
+					if (intersect(bul->Get2DPosition().x, bul->Get2DPosition().y, bul->GetWidth(), bul->GetHeight(),
+						it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight()))
+					{	//check VAR
+						bul->SetBulletActive(false);
+						it->SetEnemyAlive(false);
+						gold_cnt += 10;
+						score_cnt += 5;
+						break;
+					}
+				}
+			}
+		}
+		//if (intersect(player->Get2DPosition().x, player->Get2DPosition().y, player->GetWidth(), player->GetHeight(),
+		//	it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight())) {
+		//	playerHealth--;
+		//}
+		it->Update(deltaTime);
+	}
 	//Update Bullet
-	for (auto it : m_listBullets)
+	for (auto& it : m_listBullets)
 	{
 		//shoot
 		if (it->GetBulletActive())
 		{
 			float x = it->Get2DPosition().x,
-				  y = it->Get2DPosition().y;
+				y = it->Get2DPosition().y;
 			x += m_bullet_speed * cos(it->GetRotation() * M_PI / 180);
 			y += m_bullet_speed * sin(it->GetRotation() * M_PI / 180);
 
 			it->Set2DPosition(x, y);
+
 			// Collision with screen
-			if (it->Get2DPosition().x < 0 || it->Get2DPosition().x > SCREEN_WIDTH || it->Get2DPosition().y < 0 || it->Get2DPosition().y > SCREEN_HEIDHT)
+			if (it->Get2DPosition().x < 0 || it->Get2DPosition().x > SCREEN_WIDTH ||
+				it->Get2DPosition().y < 0 || it->Get2DPosition().y > SCREEN_HEIDHT)
 			{
 				it->SetBulletActive(false);
 			}
-			// collision with enemy
-			if (intersect(enemy->Get2DPosition().x, enemy->Get2DPosition().y, enemy->GetWidth(), enemy->GetHeight(),
-				it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight()))
-			{
-				it->SetBulletActive(false);
-			}
-			it->Update(deltaTime);
 		}
-	}
-	//time1 += deltaTime;
-
-	//Update Enemy
-	for (auto it : m_listEnemies) {
-		GSPlay::EnemyAutoMove(it);
-
-		//check VAR
-		if (intersect(bullet->Get2DPosition().x, bullet->Get2DPosition().y, bullet->GetWidth(), bullet->GetHeight(),
-			it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight()))
-		{
-			it->alive = false;
-
-		}
-		if (intersect(player->Get2DPosition().x, player->Get2DPosition().y, player->GetWidth(), player->GetHeight(),
-			it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight())) {
-			playerHealth--;
-		}
-		enemy->Update(deltaTime);
+		it->Update(deltaTime);
 	}
 
-	//Update position of camera
-	//Camera::GetInstance()->Update(deltaTime);
-	//obj->Update(deltaTime);
+	GSPlay::UpdateValue(golds, gold_cnt);
+	GSPlay::UpdateValue(scores, score_cnt);
+	gold->Update(deltaTime);
+	score->Update(deltaTime);
 }
 
 void GSPlay::Draw(SDL_Renderer* renderer)
@@ -405,22 +411,22 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	m_score->Draw(renderer);
 	score->Draw(renderer);
 	gold->Draw(renderer);
-	money->Draw(renderer);
+	m_gold->Draw(renderer);
 	weapon->Draw(renderer);
 
 	//Draw heart
-	if (playerHealth > 0)
-	{
-		m_heartIcons[0]->Draw(renderer);
-	}
-	if (playerHealth > 1)
-	{
-		m_heartIcons[1]->Draw(renderer);
-	}
-	if (playerHealth > 2)
-	{
-		m_heartIcons[2]->Draw(renderer);
-	}
+	//if (playerHealth > 0)
+	//{
+	//	m_heartIcons[0]->Draw(renderer);
+	//}
+	//if (playerHealth > 1)
+	//{
+	//	m_heartIcons[1]->Draw(renderer);
+	//}
+	//if (playerHealth > 2)
+	//{
+	//	m_heartIcons[2]->Draw(renderer);
+	//}
 
 	
 	//Render Button
@@ -440,8 +446,8 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	//Render Enemy
 	for (auto it : m_listEnemies)
 	{
-		if(it->alive)
-		it->Draw(renderer);
+		if(it->GetEnemyLive())
+			it->Draw(renderer);
 	}
 
 	//Render Bullet
@@ -462,7 +468,7 @@ void GSPlay::EnemyAutoMove(std::shared_ptr<SpriteAnimation> e)
 	//tinh khoang cach
 	float dist = distance(player->Get2DPosition().x, player->Get2DPosition().y, e->Get2DPosition().x, e->Get2DPosition().y);
 
-	if (dist > 10)
+	if (dist > 20)
 	{
 		float a = e->Get2DPosition().x;
 		a += cos(angle) * m_enemySpeed;
@@ -472,9 +478,15 @@ void GSPlay::EnemyAutoMove(std::shared_ptr<SpriteAnimation> e)
 		e->Set2DPosition(a, b);
 		dist = distance(player->Get2DPosition().x, player->Get2DPosition().y, a, b);
 	}
-	else
-	{
-
-	}
 	
 }
+
+void GSPlay::UpdateValue(int& value, int upd)
+{
+	value = upd;
+}
+
+
+
+
+
