@@ -50,4 +50,13 @@ std::shared_ptr<TextureManager> ResourceManagers::GetTexture(const std::string& 
 	return texture;
 }
 
+//void ResourceManagers::StopSound(const std::string& name)
+//{
+//
+//}
+//
+//void ResourceManagers::PlaySound(const std::string& name, bool loop = false)
+//{
+//}
+
 

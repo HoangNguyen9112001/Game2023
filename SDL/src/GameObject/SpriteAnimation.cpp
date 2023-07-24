@@ -1,5 +1,7 @@
 #include "SpriteAnimation.h"
 #include "TextureManager.h"
+#include "Define.h"
+
 SpriteAnimation::SpriteAnimation(std::shared_ptr<TextureManager> texture, int spriteRow, int frameCount, int numAction, float frameTime) : BaseObject(texture)
 {
 	m_spriteRow = spriteRow;
@@ -82,19 +84,23 @@ int SpriteAnimation::GetHeight()
 
 void SpriteAnimation::MoveLeft(float deltaTime)
 {
+	
 	m_position.x -= 100 * deltaTime;
 }
 
 void SpriteAnimation::MoveRight(float deltaTime)
 {
+
 	m_position.x += 100 * deltaTime;
 }
 void SpriteAnimation::MoveUp(float deltaTime)
 {
+
 	m_position.y -= 100 * deltaTime;
 }
 void SpriteAnimation::MoveDown(float deltaTime)
 {	
+	
 	m_position.y += 100 * deltaTime;
 }
 

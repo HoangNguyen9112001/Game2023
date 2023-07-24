@@ -79,7 +79,7 @@ void GSPlay::Init()
 	button->SetSize(60, 60);
 	button->Set2DPosition(SCREEN_WIDTH - 150, 20);
 	button->SetOnClick([this]() {
-		
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PAUSEGAME);
 		});
 	m_listButton.push_back(button);
 
@@ -305,7 +305,7 @@ void GSPlay::Update(float deltaTime)
 
 		//get hand posision
 
-		double handX = player->Get2DPosition().x + player->GetWidth() / 2 + cos(weaponAngle * M_PI / 180) * 25;
+		double handX = player->Get2DPosition().x + player->GetWidth() / 2 + cos(weaponAngle * M_PI / 180) * 25 ;
 		double handY = player->Get2DPosition().y + player->GetHeight() / 2 + sin(weaponAngle * M_PI / 180) * 25;
 
 		//set gun on hand
@@ -314,16 +314,38 @@ void GSPlay::Update(float deltaTime)
 		//Move Player
 		switch (m_KeyPress) {
 		case 1: // Move left
-			it->MoveLeft(deltaTime);
+				if (player->Get2DPosition().x < 0)
+				{
+					player->Set2DPosition(0, player->Get2DPosition().y);
+				}
+				else {
+					playerDirection = -1;
+					it->MoveLeft(deltaTime);
+				}
 			break;
 		case 2: // Move down
-			it->MoveDown(deltaTime);
+			if (player->Get2DPosition().y > SCREEN_HEIGHT - player->GetHeight()) {
+				player->Set2DPosition(player->Get2DPosition().x, SCREEN_HEIGHT - player->GetHeight());
+			}
+			else
+				it->MoveDown(deltaTime);
 			break;
 		case 4: // Move right
-			it->MoveRight(deltaTime);
+			if (player->Get2DPosition().x > SCREEN_WIDTH - player->GetWidth())
+			{
+				player->Set2DPosition(SCREEN_WIDTH - player->GetWidth(), player->Get2DPosition().y);
+			}
+			else {
+				playerDirection = 1;
+				it->MoveRight(deltaTime);
+			}
 			break;
 		case 8: // Move up
-			it->MoveUp(deltaTime);
+			if (player->Get2DPosition().y < 0) {
+				player->Set2DPosition(player->Get2DPosition().x, 0);
+			}
+			else
+				it->MoveUp(deltaTime);
 			break;
 		default:
 			break;
@@ -477,8 +499,3 @@ void GSPlay::UpdateValue(int& value, int upd)
 {
 	value = upd;
 }
-
-
-
-
-

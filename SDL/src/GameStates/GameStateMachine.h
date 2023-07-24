@@ -10,7 +10,8 @@ enum class StateType
 	STATE_PLAY,
 	STATE_OPTION, 
 	STATE_CREDIT,
-	STATE_PICKPLAYER
+	STATE_PICKPLAYER,
+	STATE_PAUSEGAME
 };
 class GameStateMachine : public CSingleton<GameStateMachine>
 {

@@ -10,7 +10,7 @@ GSMenu::~GSMenu()
 {
 }
 
-
+int isPlayingSound = 1;
 
 void GSMenu::Init()
 {
@@ -72,8 +72,14 @@ void GSMenu::Init()
 	m_textGameName->SetSize(500, 100);
 	m_textGameName->Set2DPosition((SCREEN_WIDTH - m_textGameName->GetWidth())/2, SCREEN_HEIGHT / 2 - 300);
 	m_textGameName->LoadFromRenderText("Monster Survivor");
-	//m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
-	//m_Sound->PlaySound();
+	m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
+	m_Sound->PlaySound();
+	if (isPlayingSound == 0) {
+		m_Sound->PauseSound();
+	}
+	else {
+		m_Sound->ResumeSound();
+	}
 }
 
 void GSMenu::Exit()

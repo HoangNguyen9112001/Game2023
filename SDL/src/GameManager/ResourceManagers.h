@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
 #include "Singleton.h"
-
+#include "Sound.h"
 #include "GameObject/TextureManager.h"
 
 
@@ -20,6 +20,10 @@ public:
 	void RemoveFont(const std::string& name);
 
 	std::shared_ptr<TextureManager> GetTexture(const std::string& name);
+
+	//void StopSound(const std::string& name);
+	//void PlaySound(const std::string& name, bool loop = false);
+
 private:
 	std::map<std::string, std::shared_ptr<TextureManager>> m_MapTexture;
 	std::string m_ShaderPath;
