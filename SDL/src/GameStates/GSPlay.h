@@ -27,6 +27,7 @@ public:
 	void	Update(float deltaTime) override;
 	void	Draw(SDL_Renderer* renderer) override;
 	void	EnemyAutoMove(std::shared_ptr<SpriteAnimation> obj);
+	
 
 	int m_enemySpeed;
 
@@ -35,13 +36,14 @@ public:
 	double weaponAngle = 0;
 	int m_KeyPress;
 
+
 	int m_bullet_speed = 20;
 	int m_MouseMotion;
 
 	TTF_Font* m_font = TTF_OpenFont("Data/font2.ttf", 16);
 	int m_lastShootTime;
 	int m_shootDelay = 5;
-
+	
 	void UpdateValue(int& value, int upd);
 private:
 	int scores = 0,
@@ -50,6 +52,8 @@ private:
 		score_cnt = 0;
 	int m_textwidth = 20,
 		m_textheight = 50;
+
+
 
 	std::shared_ptr<Sprite2D>	m_background;
 	std::shared_ptr<Sprite2D>	m_gold;
@@ -74,6 +78,8 @@ private:
 	std::shared_ptr<SpriteAnimation>			enemy;
 
 	std::shared_ptr<MouseButton>				button;
+
+	std::shared_ptr<MouseButton> m_endGameButton;
 
 	float time = 0.0f;
 	float m_Velocity = 10.0f;

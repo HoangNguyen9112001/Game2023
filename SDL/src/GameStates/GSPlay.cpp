@@ -16,6 +16,14 @@ float distance(float x1, float y1, float x2, float y2) {
 bool intersect(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2) {
 	return !(x1 > x2 + w2 || x1 + w1 < x2 || y1 > y2 + h2 || y1 + h1 < y2);
 }
+
+//variables for decreasing health and flashing sprite during invulnerability period
+bool isInvulnerable = false;
+bool isSpriteVisible = true;
+Uint32 resetInvulnerability(Uint32 interval, void* param);
+Uint32 toggleSpriteVisibility(Uint32 interval, void* param);
+
+
 GSPlay::GSPlay()
 {
 }
@@ -61,12 +69,13 @@ void GSPlay::Init()
 	m_heartIcons.push_back(m_heartIcon);
 
 	// Close button
-	texture = ResourceManagers::GetInstance()->GetTexture("btn_close.tga");
+	texture = ResourceManagers::GetInstance()->GetTexture("button/031.png");
 	button = std::make_shared<MouseButton>( texture, SDL_FLIP_NONE);
 	button->SetSize(60, 60);
 	button->Set2DPosition(SCREEN_WIDTH - 75, 20);
 	button->SetOnClick([this]() {
-		GameStateMachine::GetInstance()->PopState();
+		//GameStateMachine::GetInstance()->PopState();
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
 		});
 	m_listButton.push_back(button);
 
@@ -80,6 +89,15 @@ void GSPlay::Init()
 		});
 	m_listButton.push_back(button);
 
+	//End game
+	auto texture0 = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("gameover.png"), SDL_FLIP_NONE);
+	m_endGameButton = std::make_shared<MouseButton>(texture0, SDL_FLIP_NONE);
+	m_endGameButton->Set2DPosition(400, 350);
+	m_endGameButton->SetSize(100, 100);
+	m_endGameButton->SetOnClick([this]() {
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
+		});
+	
    // Player
 	texture = ResourceManagers::GetInstance()->GetTexture("player.png");
 	player = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
@@ -263,6 +281,7 @@ void GSPlay::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 			break;
 		}
 	}
+	m_endGameButton->HandleTouchEvent(&e);
 }
 
 void GSPlay::HandleMouseMoveEvents(int x, int y)
@@ -370,10 +389,25 @@ void GSPlay::Update(float deltaTime)
 				}
 			}
 		}
-		//if (intersect(player->Get2DPosition().x, player->Get2DPosition().y, player->GetWidth(), player->GetHeight(),
-		//	it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight())) {
-		//	playerHealth--;
-		//}
+		if (intersect(player->Get2DPosition().x, player->Get2DPosition().y, player->GetWidth(), player->GetHeight(),
+			it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight())) {
+			if (!isInvulnerable) {
+				// Reduce character's health here
+				playerHealth--;
+				// Set the character to be invulnerable
+				isInvulnerable = true;
+
+				// Set a timer for the invulnerability cooldown period (in milliseconds)
+				int invulnerabilityCooldown = 3000; // Change this value to suit your needs
+				SDL_AddTimer(invulnerabilityCooldown, resetInvulnerability, NULL);
+
+				// Set up a timer for toggling sprite visibility (shorter interval for a noticeable flash)
+				//int flashingInterval = 300; // Adjust this value to control the flashing speed
+				//SDL_AddTimer(flashingInterval, toggleSpriteVisibility, NULL);
+
+			}
+			
+		}
 		it->Update(deltaTime);
 	}
 	//Update Bullet
@@ -415,20 +449,22 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	weapon->Draw(renderer);
 
 	//Draw heart
-	//if (playerHealth > 0)
-	//{
-	//	m_heartIcons[0]->Draw(renderer);
-	//}
-	//if (playerHealth > 1)
-	//{
-	//	m_heartIcons[1]->Draw(renderer);
-	//}
-	//if (playerHealth > 2)
-	//{
-	//	m_heartIcons[2]->Draw(renderer);
-	//}
+	if (playerHealth > 0)
+	{
+		m_heartIcons[0]->Draw(renderer);
+	}
+	if (playerHealth > 1)
+	{
+		m_heartIcons[1]->Draw(renderer);
+	}
+	if (playerHealth > 2)
+	{
+		m_heartIcons[2]->Draw(renderer);
+	}
 
-	
+	if (playerHealth < 1) {
+		m_endGameButton->Draw(renderer);
+	}
 	//Render Button
 	for (auto it : m_listButton)
 	{
@@ -439,7 +475,12 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	for (auto it : m_listAnimation)
 	{
 
-		it->Draw(renderer);
+			if (isSpriteVisible) {
+				it->Draw(renderer);
+			}
+		
+		
+		
 
 	}
 
@@ -458,6 +499,27 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	}
 
 }
+
+//Reset invulnerable state
+Uint32 resetInvulnerability(Uint32 interval, void* param) {
+	isInvulnerable = false;
+	if (!isInvulnerable) {
+		return 0;
+	}
+	return interval;
+
+}
+//Toggle sprite visibility to make flashing effect
+Uint32 toggleSpriteVisibility(Uint32 interval, void* param) {
+	isSpriteVisible = !isSpriteVisible; 
+	if (isInvulnerable) {
+		return interval;
+	}
+	isSpriteVisible = true;
+	return 0;
+}
+
+
 
 void GSPlay::EnemyAutoMove(std::shared_ptr<SpriteAnimation> e)
 {
@@ -480,6 +542,8 @@ void GSPlay::EnemyAutoMove(std::shared_ptr<SpriteAnimation> e)
 	}
 	
 }
+
+
 
 void GSPlay::UpdateValue(int& value, int upd)
 {
