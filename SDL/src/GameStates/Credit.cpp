@@ -19,7 +19,7 @@ void Credit::Init() {
 	// background
 
 	cre_background = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
-	cre_background->SetSize(SCREEN_WIDTH, SCREEN_HEIDHT);
+	cre_background->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	cre_background->Set2DPosition(0, 0);
 
 	// button close
@@ -37,7 +37,7 @@ void Credit::Init() {
 	cre_text_color = { 0, 0, 0 };
 	credit_text = std::make_shared<Text>("Data/font2.ttf", cre_text_color, 20);
 	credit_text->SetSize(300, 50);
-	credit_text->Set2DPosition((SCREEN_WIDTH - credit_text->GetWidth()) / 2, SCREEN_HEIDHT / 2 - 200);
+	credit_text->Set2DPosition((SCREEN_WIDTH - credit_text->GetWidth()) / 2, SCREEN_HEIGHT / 2 - 200);
 	credit_text->LoadFromRenderText("Game stolen by our group, let's find Survivo.io! Thanks you");
 	
 }

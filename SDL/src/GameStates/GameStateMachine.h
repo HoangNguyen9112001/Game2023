@@ -11,7 +11,8 @@ enum class StateType
 	STATE_PAUSE,
 	STATE_OPTION, 
 	STATE_CREDIT,
-	STATE_ENDGAME
+	STATE_ENDGAME,
+	STATE_PICKPLAYER
 };
 class GameStateMachine : public CSingleton<GameStateMachine>
 {

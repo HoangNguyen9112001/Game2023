@@ -25,11 +25,16 @@ public:
 	void	Update(float deltaTime) override;
 	void	Draw(SDL_Renderer* renderer) override;
 
+	int m_KeyPress;
 private:
 
-	std::list<std::shared_ptr<MouseButton>>		m_listButton;
+	std::shared_ptr<Sprite2D>				m_background;
+	std::shared_ptr<Sprite2D>				m_boder;
+	std::list<std::shared_ptr<MouseButton>>	m_listButton;
+	std::shared_ptr<Text>					m_textGameSetting;
+	std::shared_ptr<Text>					m_textGameVolumn;
 
-	std::shared_ptr<Sprite2D>				opt_bg, menu_opt;
-	std::list<std::shared_ptr<MouseButton>>	opt_bt;
-	std::shared_ptr<MouseButton>			button, sfx_on_bt, sfx_off_bt, music_on_bt, music_off_bt;
+	SDL_Color color;
+	std::shared_ptr<MouseButton> m_soundButtonPlay;
+	std::shared_ptr<MouseButton> m_soundButtonOff;
 };

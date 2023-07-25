@@ -24,6 +24,9 @@ bool hasCollided = false;
 Uint32 resetInvulnerability(Uint32 interval, void* param);
 Uint32 toggleSpriteVisibility(Uint32 interval, void* param);
 
+
+//player is picked
+extern int i;
 GSPlay::GSPlay()
 {
 }
@@ -47,7 +50,7 @@ void GSPlay::Init()
 
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_city.png");
 	m_background = std::make_shared<Sprite2D>( texture, SDL_FLIP_NONE);
-	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIDHT);
+	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_background->Set2DPosition(0, 0);
 
 	// heart icon
@@ -81,7 +84,7 @@ void GSPlay::Init()
 
 
 	// Pause button
-	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_pause.tga"), SDL_FLIP_NONE);
+	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("button/017.png"), SDL_FLIP_NONE);
 	button->SetSize(60, 60);
 	button->Set2DPosition(SCREEN_WIDTH - 150, 20);
 	button->SetOnClick([this]() {
@@ -98,18 +101,26 @@ void GSPlay::Init()
 		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
 		});
 
-   // Player
-	texture = ResourceManagers::GetInstance()->GetTexture("player.png");
-	player = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
+   // Pick Player
+	//Player1
+	if (i == 0) {
+		texture = ResourceManagers::GetInstance()->GetTexture("player.png");
+		player = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
+		player->SetFlip(SDL_FLIP_HORIZONTAL);
+		player->SetSize(60, 80);
+		player->Set2DPosition(350, 400);
+		m_listAnimation.push_back(player);
+	}
 
-   // Animation 
-	texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
-	player = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
-
-	player->SetFlip(SDL_FLIP_HORIZONTAL);
-	player->SetSize(60	, 80);
-	player->Set2DPosition(350, 400);
-	m_listAnimation.push_back(player);
+	//player2
+	if (i == 1) {
+		texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
+		player = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
+		player->SetFlip(SDL_FLIP_HORIZONTAL);
+		player->SetSize(60, 80);
+		player->Set2DPosition(350, 400);
+		m_listAnimation.push_back(player);
+	}
 	
 	//SCORE
 	m_textColor = { 0, 0, 255 };
@@ -160,7 +171,7 @@ void GSPlay::Init()
 		enemy = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
 		enemy->SetFlip(SDL_FLIP_NONE);
 		enemy->SetSize(40, 50);
-		enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIDHT);
+		enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT);
 		enemy->SetEnemyAlive(true);
 		m_listEnemies.push_back(enemy);
 	}
@@ -201,16 +212,16 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 			//Adjust the velocity
 			switch (e.key.keysym.sym)
 			{
-			case SDLK_UP:
+			case SDLK_w:
 				m_KeyPress |= 1 << 3;
 				break;
-			case SDLK_DOWN:
+			case SDLK_s:
 				m_KeyPress |= 1 << 1;
 				break;
-			case SDLK_LEFT:
+			case SDLK_a:
 				m_KeyPress |= 1;
 				break;
-			case SDLK_RIGHT:
+			case SDLK_d:
 				m_KeyPress |= 1 << 2;
 				break;
 			default:
@@ -226,16 +237,16 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 			//Adjust the velocity
 			switch (e.key.keysym.sym)
 			{
-			case SDLK_LEFT:
+			case SDLK_a:
 				m_KeyPress ^= 1;
 				break;
-			case SDLK_DOWN:
+			case SDLK_s:
 				m_KeyPress ^= 1 << 1;
 				break;
-			case SDLK_RIGHT:
+			case SDLK_d:
 				m_KeyPress ^= 1 << 2;
 				break;
-			case SDLK_UP:
+			case SDLK_w:
 				m_KeyPress ^= 1 << 3;
 				break;
 			default:
@@ -252,7 +263,7 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 	case SDL_MOUSEBUTTONDOWN:
 		if (e.button.button == SDL_BUTTON_LEFT)
 		{
-			for (auto it : m_listBullets)
+			for (auto& it : m_listBullets)
 			{
 				int curentTime = SDL_GetTicks();
 				//create bullet
@@ -321,50 +332,44 @@ void GSPlay::Update(float deltaTime)
 		//set gun on hand
 		weapon->Set2DPosition(handX - weapon->GetWidth() / 2, handY - weapon->GetHeight() / 2);
 
-		//Move left
-		if (m_KeyPress == 1)
-		{
+		//Move pplayer
+		switch (m_KeyPress) {
+		case 1: // Move left
 			if (player->Get2DPosition().x < 0)
 			{
 				player->Set2DPosition(0, player->Get2DPosition().y);
 			}
-			else
-			{
+			else {
 				playerDirection = -1;
 				it->MoveLeft(deltaTime);
 			}
-		}
-		it->Update(deltaTime);
-		//Move down
-		if (m_KeyPress == 2)
-		{
-			if (player->Get2DPosition().y > SCREEN_HEIDHT - player->GetHeight()) {
-				player->Set2DPosition(player->Get2DPosition().x, SCREEN_HEIDHT - player->GetHeight() );
+			break;
+		case 2: // Move down
+			if (player->Get2DPosition().y > SCREEN_HEIGHT - player->GetHeight()) {
+				player->Set2DPosition(player->Get2DPosition().x, SCREEN_HEIGHT - player->GetHeight());
 			}
 			else
 				it->MoveDown(deltaTime);
-		}
-		it->Update(deltaTime);
-		//Move right
-		if (m_KeyPress == 4)
-		{
-			if (player->Get2DPosition().x > SCREEN_WIDTH - player->GetWidth()) {
+			break;
+		case 4: // Move right
+			if (player->Get2DPosition().x > SCREEN_WIDTH - player->GetWidth())
+			{
 				player->Set2DPosition(SCREEN_WIDTH - player->GetWidth(), player->Get2DPosition().y);
 			}
 			else {
 				playerDirection = 1;
 				it->MoveRight(deltaTime);
 			}
-		}
-		it->Update(deltaTime);
-		//Move up
-		if (m_KeyPress == 8)
-		{
+			break;
+		case 8: // Move up
 			if (player->Get2DPosition().y < 0) {
 				player->Set2DPosition(player->Get2DPosition().x, 0);
 			}
 			else
 				it->MoveUp(deltaTime);
+			break;
+		default:
+			break;
 		}
 		it->Update(deltaTime);
 
@@ -423,16 +428,16 @@ void GSPlay::Update(float deltaTime)
 		//shoot
 		if (it->GetBulletActive())
 		{
-			float x = it->Get2DPosition().x,
-				y = it->Get2DPosition().y;
-			x += m_bullet_speed * cos(it->GetRotation() * M_PI / 180);
-			y += m_bullet_speed * sin(it->GetRotation() * M_PI / 180);
+			float x = it->Get2DPosition().x;
+			float y = it->Get2DPosition().y;
+			float r = it->GetRotation();
+			// shooting
+			x += m_bullet_speed * cos(r * M_PI / 180);
+			y += m_bullet_speed * sin(r * M_PI / 180);
 
 			it->Set2DPosition(x, y);
-
 			// Collision with screen
-			if (it->Get2DPosition().x < 0 || it->Get2DPosition().x > SCREEN_WIDTH ||
-				it->Get2DPosition().y < 0 || it->Get2DPosition().y > SCREEN_HEIDHT)
+			if (x < 0 || x > SCREEN_WIDTH || y < 0 || y > SCREEN_HEIGHT)
 			{
 				it->SetBulletActive(false);
 			}
@@ -453,7 +458,7 @@ void GSPlay::Update(float deltaTime)
 			enemy = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
 			enemy->SetFlip(SDL_FLIP_NONE);
 			enemy->SetSize(40, 50);
-			enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIDHT);
+			enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT);
 			enemy->SetEnemyAlive(true);
 			m_listEnemies.push_back(enemy);
 		}
@@ -481,6 +486,7 @@ void GSPlay::Update(float deltaTime)
 
 	int minutes = countdown / 60;
 	int seconds = countdown % 60;
+
 
 	min = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
 	//TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
@@ -596,6 +602,7 @@ Uint32 resetInvulnerability(Uint32 interval, void* param) {
 	}
 	return interval;
 }
+
 //Toggle sprite visibility to make flashing effect
 Uint32 toggleSpriteVisibility(Uint32 interval, void* param) {
 	if (isInvulnerable && hasCollided) {
@@ -636,7 +643,6 @@ void GSPlay::EnemyAutoMove(std::shared_ptr<SpriteAnimation> e)
 	}
 	
 }
-
 
 
 void GSPlay::UpdateValue(int& value, int upd)

@@ -2,9 +2,13 @@
 #include "GameObject/TextureManager.h"
 #include "GameObject/MouseButton.h"
 #include "GSMenu.h"
+#include "SpriteAnimation.h"
+#include "Math.h"
+#include "SDL_mixer.h"
+
+extern bool isPlayingSound;
 
 GSPause::GSPause()
-	: GameStateBase(StateType::STATE_PAUSE), opt_bg(nullptr), opt_bt(std::list<std::shared_ptr<MouseButton>>{})
 {
 
 }
@@ -14,71 +18,65 @@ void GSPause::Init()
 {
 
 	//background
-	opt_bg = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("bg_menu.tga"), SDL_FLIP_NONE);
-	opt_bg->Set2DPosition(0, 0);
-	opt_bg->SetSize(SCREEN_WIDTH, SCREEN_HEIDHT);
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_city.png");
+	m_background = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
+	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	m_background->Set2DPosition(0, 0);
 
+	//Boder
+	m_boder = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("khung.png"), SDL_FLIP_NONE);
+	m_boder->SetSize(800, 300);
+	m_boder->Set2DPosition((SCREEN_WIDTH - m_boder->GetWidth()) / 2, (SCREEN_HEIGHT - m_boder->GetHeight()) / 2);
 
-	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_pause.tga"), SDL_FLIP_NONE);
-	button->SetSize(60, 60);
-	button->Set2DPosition(SCREEN_WIDTH/2, SCREEN_HEIDHT/2);
+	//continue
+	std::shared_ptr<MouseButton> button = std::make_shared<MouseButton>(ResourceManagers::
+		GetInstance()->GetTexture("button/032.png"), SDL_FLIP_HORIZONTAL);
+	button->SetSize(70, 70);
+	button->Set2DPosition(m_boder->Get2DPosition().x + 190, m_boder->Get2DPosition().y + 120);
 	button->SetOnClick([this]() {
 		GameStateMachine::GetInstance()->PopState();
 		});
 	m_listButton.push_back(button);
-	
 
-	////Button close
-	//button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_close.tga"), SDL_FLIP_NONE);
-	//button->SetSize(50, 50);
-	//button->Set2DPosition(SCREEN_WIDTH - 50, 10);
-	//button->SetOnClick([this]() {
-	//	GameStateMachine::GetInstance()->PopState();
-	//	});
-	//opt_bt.push_back(button);
+	//Sound control
+	m_soundButtonPlay = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_music.tga"), SDL_FLIP_NONE);
+	m_soundButtonPlay->SetSize(70, 70);
+	m_soundButtonPlay->Set2DPosition(m_boder->Get2DPosition().x + 565, m_boder->Get2DPosition().y + 120);
 
-	//menu option 
-	/*menu_opt = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("menu_opt.png"), SDL_FLIP_NONE);
-	menu_opt->SetSize(700, 500);
-	menu_opt->Set2DPosition((SCREEN_WIDTH - menu_opt->GetWidth()) / 2, (SCREEN_HEIDHT - menu_opt->GetHeight()) / 2);*/
-
-	////Music 
-	/*music_on_bt = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_music.tga"), SDL_FLIP_NONE);
-	music_on_bt->SetSize(70, 70);
-	music_on_bt->Set2DPosition((SCREEN_WIDTH - menu_opt->GetWidth()) / 2 + menu_opt->GetWidth() / 3 - music_on_bt->GetWidth() / 2,
-		(SCREEN_HEIDHT - menu_opt->GetHeight()) / 2 + menu_opt->GetHeight() / 3);
-	music_on_bt->SetOnClick([this]() {
-		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PAUSE);
+	m_soundButtonPlay->SetOnClick([this]() {
+		Mix_PauseMusic();
+		isPlayingSound = false;
 		});
-	opt_bt.push_back(music_on_bt);*/
 
-	//music_off_bt = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_music_off.tga"), SDL_FLIP_NONE);
-	//music_off_bt->SetSize(70, 70);
-	//music_off_bt->Set2DPosition((SCREEN_WIDTH - menu_opt->GetWidth()) / 2 + menu_opt->GetWidth() * 2 / 3 - music_off_bt->GetWidth() / 2,
-	//	(SCREEN_HEIDHT - menu_opt->GetHeight()) / 2 + menu_opt->GetHeight() / 3);
-	//music_off_bt->SetOnClick([this]() {
-	//	&Sound::StopSound;
-	//	});
-	//opt_bt.push_back(music_off_bt);
+	m_listButton.push_back(m_soundButtonPlay);
+	m_soundButtonOff = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_music_off.tga"), SDL_FLIP_NONE);
+	m_soundButtonOff->SetSize(70, 70);
+	m_soundButtonOff->Set2DPosition(m_boder->Get2DPosition().x + 565, m_boder->Get2DPosition().y + 120);
 
-	////SFX 
-	//sfx_on_bt = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_sfx.tga"), SDL_FLIP_NONE);
-	//sfx_on_bt->SetSize(70, 70);
-	//sfx_on_bt->Set2DPosition((SCREEN_WIDTH - menu_opt->GetWidth()) / 2 + menu_opt->GetWidth() / 3 - sfx_on_bt->GetWidth() / 2,
-	//	(SCREEN_HEIDHT - menu_opt->GetHeight()) / 2 + menu_opt->GetHeight() * 2 / 3 - sfx_on_bt->GetHeight() * 2 / 3);
-	//sfx_on_bt->SetOnClick([this]() {
+	m_soundButtonOff->SetOnClick([this]() {
+		Mix_ResumeMusic();
+		isPlayingSound = true;
+		});
+	m_listButton.push_back(m_soundButtonOff);
 
-	//	});
-	//opt_bt.push_back(sfx_on_bt);
+	//Restart
+	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_restart.tga"), SDL_FLIP_NONE);
+	button->SetSize(70, 70);
+	button->Set2DPosition(m_boder->Get2DPosition().x + 375, m_boder->Get2DPosition().y + 120);
+	button->SetOnClick([this]() {
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PLAY);
+		});
+	m_listButton.push_back(button);
 
-	//sfx_off_bt = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_sfx_off.tga"), SDL_FLIP_NONE);
-	//sfx_off_bt->SetSize(70, 70);
-	//sfx_off_bt->Set2DPosition((SCREEN_WIDTH - menu_opt->GetWidth()) / 2 + menu_opt->GetWidth() * 2 / 3 - sfx_off_bt->GetWidth() / 2,
-	//	(SCREEN_HEIDHT - menu_opt->GetHeight()) / 2 + menu_opt->GetHeight() * 2 / 3 - sfx_off_bt->GetHeight() * 2 / 3);
-	//sfx_off_bt->SetOnClick([this]() {
+	//title
+	color = { 0, 0, 0 };
+	m_textGameSetting = std::make_shared<Text>("Data/font2.ttf", color, 28);
+	m_textGameSetting->SetSize(300, 70);
+	m_textGameSetting->Set2DPosition((SCREEN_WIDTH - m_textGameSetting->GetWidth()) / 2, m_boder->Get2DPosition().y - 100);
+	m_textGameSetting->LoadFromRenderText("Pause");
 
-	//	});
-	//opt_bt.push_back(sfx_off_bt);
+	m_KeyPress = 0;
+	
 }
 void	GSPause::Exit()
 {
@@ -105,6 +103,14 @@ void	GSPause::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 		{
 			break;
 		}
+		if (isPlayingSound)
+		{
+			m_soundButtonPlay->HandleTouchEvent(&e);
+		}
+		else
+		{
+			m_soundButtonOff->HandleTouchEvent(&e);
+		}
 	}
 }
 void	GSPause::HandleMouseMoveEvents(int x, int y)
@@ -116,15 +122,20 @@ void	GSPause::Update(float deltaTime)
 void	GSPause::Draw(SDL_Renderer* renderer)
 {
 
-	opt_bg->Draw(renderer);
-	for (auto it : opt_bt)
+	m_background->Draw(renderer);
+	m_boder->Draw(renderer);
+
+	for (auto& it : m_listButton)
 	{
 		it->Draw(renderer);
 	}
-	//menu_opt->Draw(renderer);
-	for (auto it : m_listButton)
+
+	if (isPlayingSound)
 	{
-		it->Draw(renderer);
+		m_soundButtonPlay->Draw(renderer);
 	}
-	
+	else
+	{
+		m_soundButtonOff->Draw(renderer);
+	}
 }
