@@ -1,6 +1,8 @@
 #pragma once
 #include "SDL_mixer.h"
 #include <string>
+#include "GameManager/Singleton.h"
+
 class Sound
 {
 public:

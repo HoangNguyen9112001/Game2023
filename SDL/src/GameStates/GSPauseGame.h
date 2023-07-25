@@ -27,6 +27,7 @@ public:
 	int m_KeyPress;
 private:
 	std::shared_ptr<Sprite2D>				m_background;
+	std::shared_ptr<Sprite2D>				m_boder;
 	std::list<std::shared_ptr<MouseButton>>	m_listButton;
 	std::shared_ptr<Text>					m_textGameSetting;
 	std::shared_ptr<Text>					m_textGameVolumn;

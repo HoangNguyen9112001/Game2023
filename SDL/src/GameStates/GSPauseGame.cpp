@@ -6,10 +6,11 @@
 #include "MouseButton.h"
 #include "SpriteAnimation.h"
 #include "Math.h"
+#include "SDL_mixer.h"
 
 //control sound
 
-extern int isPlayingSound;
+extern bool isPlayingSound;
 
 
 GSPauseGame::GSPauseGame()
@@ -29,55 +30,64 @@ void GSPauseGame::Init()
 	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_background->Set2DPosition(0, 0);
 
-	//back 
+	//Boder
+	m_boder = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("khung.png"), SDL_FLIP_NONE);
+	m_boder->SetSize(800, 300);
+	m_boder->Set2DPosition((SCREEN_WIDTH - m_boder->GetWidth()) / 2, (SCREEN_HEIGHT - m_boder->GetHeight()) / 2);
+
+	//continue
 	std::shared_ptr<MouseButton> button = std::make_shared<MouseButton>(ResourceManagers::
 		GetInstance()->GetTexture("btn_prev.tga"), SDL_FLIP_NONE);
-	button->SetSize(60, 60);
-	button->Set2DPosition(75, 20);
+	button->SetSize(70, 70);
+	button->Set2DPosition(m_boder->Get2DPosition().x + 190, m_boder->Get2DPosition().y + 120);
 	button->SetOnClick([this]() {
 		GameStateMachine::GetInstance()->PopState();
 		});
 	m_listButton.push_back(button);
 
+	//Sound control
 	m_soundButtonPlay = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_music.tga"), SDL_FLIP_NONE);
 	m_soundButtonPlay->SetSize(70, 70);
-	m_soundButtonPlay->Set2DPosition(SCREEN_WIDTH - 450.0f, 200.0f);
-	m_soundButtonPlay->SetOnClick([this]() {
-		isPlayingSound = 0;
-	//	ResourceManagers::GetInstance()->StopSound(SoundPlay);
-		});
-	m_listButton.push_back(m_soundButtonPlay);
+	m_soundButtonPlay->Set2DPosition(m_boder->Get2DPosition().x + 565, m_boder->Get2DPosition().y + 120);
 
+	m_soundButtonPlay->SetOnClick([this]() {
+		Mix_PauseMusic();
+		isPlayingSound = false;
+		});
+
+	m_listButton.push_back(m_soundButtonPlay);
 	m_soundButtonOff = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_music_off.tga"), SDL_FLIP_NONE);
 	m_soundButtonOff->SetSize(70, 70);
-	m_soundButtonOff->Set2DPosition(SCREEN_WIDTH - 450.0f, 200.0f);
+	m_soundButtonOff->Set2DPosition(m_boder->Get2DPosition().x + 565, m_boder->Get2DPosition().y + 120);
+
 	m_soundButtonOff->SetOnClick([this]() {
-		isPlayingSound = 1;
-	//	ResourceManagers::GetInstance()->PlaySound(SoundPlay, 1);
+		Mix_ResumeMusic();
+		isPlayingSound = true;
 		});
 	m_listButton.push_back(m_soundButtonOff);
 
 	//Restart
 	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_restart.tga"), SDL_FLIP_NONE);
-	button->Set2DPosition(SCREEN_WIDTH - 530.0f, 400.0f);
-	button->SetSize(100, 100);
+	button->SetSize(70, 70);
+	button->Set2DPosition(m_boder->Get2DPosition().x + 375, m_boder->Get2DPosition().y + 120);
 	button->SetOnClick([this]() {
 		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PLAY);
 		});
 	m_listButton.push_back(button);
+
 	//title
 	color = { 0, 0, 0 };
 	m_textGameSetting = std::make_shared<Text>("Data/font2.ttf", color, 28);
-	m_textGameSetting->SetSize(500, 100);
-	m_textGameSetting->Set2DPosition((SCREEN_WIDTH - m_textGameSetting->GetWidth()) / 2, SCREEN_HEIGHT / 2 - 300);
+	m_textGameSetting->SetSize(300, 70);
+	m_textGameSetting->Set2DPosition((SCREEN_WIDTH - m_textGameSetting->GetWidth()) / 2, m_boder->Get2DPosition().y - 100);
 	m_textGameSetting->LoadFromRenderText("Pause");
 
 	//Music title
-	m_textGameVolumn = std::make_shared<Text>("Data/font2.ttf", color, 20);
+	/*m_textGameVolumn = std::make_shared<Text>("Data/font2.ttf", color, 20);
 	m_textGameVolumn->SetSize(500, 100);
 	m_textGameVolumn->Set2DPosition(500.0f, 280.0f);
 	m_textGameVolumn->LoadFromRenderText("Music");
-
+	*/
 	m_KeyPress = 0;
 }
 
@@ -103,14 +113,14 @@ void GSPauseGame::HandleKeyEvents(SDL_Event& e)
 
 void GSPauseGame::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 {
-	for (auto& button : m_listButton)
+	for (auto button : m_listButton)
 	{
 		if (button->HandleTouchEvent(&e))
 		{
 			break;
 		}
 
-		if (isPlayingSound == 1)
+		if (isPlayingSound)
 		{
 			m_soundButtonPlay->HandleTouchEvent(&e);
 		}
@@ -142,12 +152,14 @@ void GSPauseGame::Update(float deltaTime)
 void GSPauseGame::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
+	m_boder->Draw(renderer);
+
 	for (auto& it : m_listButton)
 	{
 		it->Draw(renderer);
 	}
 
-	if (isPlayingSound == 1)
+	if (isPlayingSound)
 	{
 		m_soundButtonPlay->Draw(renderer);
 	}
@@ -156,6 +168,6 @@ void GSPauseGame::Draw(SDL_Renderer* renderer)
 		m_soundButtonOff->Draw(renderer);
 	}
 	m_textGameSetting->Draw(renderer);
-	m_textGameVolumn->Draw(renderer);
+	//m_textGameVolumn->Draw(renderer);
 }
 

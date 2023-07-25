@@ -21,9 +21,8 @@ public:
 
 	std::shared_ptr<TextureManager> GetTexture(const std::string& name);
 
-	//void StopSound(const std::string& name);
-	//void PlaySound(const std::string& name, bool loop = false);
-
+	/*void PauseSound(const std::string& name);
+	void ResumeSound(const std::string& name);*/
 private:
 	std::map<std::string, std::shared_ptr<TextureManager>> m_MapTexture;
 	std::string m_ShaderPath;
@@ -33,5 +32,4 @@ private:
 
 	//Sound
 	std::string m_SoundPath;
-
 };

@@ -10,7 +10,7 @@ GSMenu::~GSMenu()
 {
 }
 
-int isPlayingSound = 1;
+bool isPlayingSound = true;
 
 void GSMenu::Init()
 {
@@ -74,12 +74,7 @@ void GSMenu::Init()
 	m_textGameName->LoadFromRenderText("Monster Survivor");
 	m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
 	m_Sound->PlaySound();
-	if (isPlayingSound == 0) {
-		m_Sound->PauseSound();
-	}
-	else {
-		m_Sound->ResumeSound();
-	}
+
 }
 
 void GSMenu::Exit()
@@ -90,13 +85,13 @@ void GSMenu::Exit()
 
 void GSMenu::Pause()
 {
-	//m_Sound->StopSound();
+	//m_Sound->PauseSound();
 
 }
 
 void GSMenu::Resume()
 {
-	//m_Sound->PlaySound();
+	//m_Sound->ResumeSound();
 }
 
 
