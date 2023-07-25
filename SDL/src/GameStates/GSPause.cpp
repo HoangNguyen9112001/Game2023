@@ -1,4 +1,4 @@
-#include "GSPauseGame.h"
+#include "GSPause.h"
 #include "TextureManager.h"
 #include "Camera.h"
 #include "Sprite2D.h"
@@ -13,16 +13,16 @@
 extern bool isPlayingSound;
 
 
-GSPauseGame::GSPauseGame()
+GSPause::GSPause()
 {
 	m_KeyPress = 0;
 }
 
-GSPauseGame::~GSPauseGame()
+GSPause::~GSPause()
 {
 }
 
-void GSPauseGame::Init()
+void GSPause::Init()
 {
 	//background
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_city.png");
@@ -91,27 +91,27 @@ void GSPauseGame::Init()
 	m_KeyPress = 0;
 }
 
-void GSPauseGame::Exit()
+void GSPause::Exit()
 {
 }
 
-void GSPauseGame::Pause()
+void GSPause::Pause()
 {
 }
 
-void GSPauseGame::Resume()
+void GSPause::Resume()
 {
 }
 
-void GSPauseGame::HandleEvents()
+void GSPause::HandleEvents()
 {
 }
 
-void GSPauseGame::HandleKeyEvents(SDL_Event& e)
+void GSPause::HandleKeyEvents(SDL_Event& e)
 {
 }
 
-void GSPauseGame::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
+void GSPause::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 {
 	for (auto button : m_listButton)
 	{
@@ -132,11 +132,11 @@ void GSPauseGame::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 	}
 }
 
-void GSPauseGame::HandleMouseMoveEvents(int x, int y)
+void GSPause::HandleMouseMoveEvents(int x, int y)
 {
 }
 
-void GSPauseGame::Update(float deltaTime)
+void GSPause::Update(float deltaTime)
 {
 	m_background->Update(deltaTime);
 	for (auto &it : m_listButton)
@@ -149,7 +149,7 @@ void GSPauseGame::Update(float deltaTime)
 	m_soundButtonOff->Update(deltaTime);
 }
 
-void GSPauseGame::Draw(SDL_Renderer* renderer)
+void GSPause::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
 	m_boder->Draw(renderer);

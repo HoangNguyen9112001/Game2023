@@ -5,12 +5,12 @@ class Text;
 class MouseButton;
 
 
-class GSPauseGame :
+class GSPause :
 	public GameStateBase
 {
 public:
-	GSPauseGame();
-	~GSPauseGame();
+	GSPause();
+	~GSPause();
 
 	void	Init() override;
 	void	Exit() override;
