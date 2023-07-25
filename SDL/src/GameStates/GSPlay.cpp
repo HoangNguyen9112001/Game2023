@@ -118,9 +118,9 @@ void GSPlay::Init()
 	m_score->Set2DPosition((SCREEN_WIDTH - m_score->GetWidth()) / 3, 45);
 	m_score->LoadFromRenderText("Score: ");
 	
-	score = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
+	score = std::make_shared<Text>("Data/calibrib.ttf", m_textColor, 14);
 	//TTF_SizeText(m_font, std::to_string(scores).c_str(), &m_textwidth, &m_textheight);
-	score->SetSize(m_textwidth, m_textheight);
+	score->SetSize(50,50);
 	score->Set2DPosition(m_score->Get2DPosition().x + m_score->GetWidth() + 5, 30);
 	score->LoadFromRenderText(std::to_string(scores));
 
@@ -133,25 +133,25 @@ void GSPlay::Init()
 		m_listBullets.push_back(bullet);
 	}
 
-	//gold
-	m_gold = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("gold_icon.png"), SDL_FLIP_NONE);
-	m_gold->SetSize(60, 60);
-	m_gold->Set2DPosition(score->Get2DPosition().x + score->GetWidth() + 50, 20);
+	////gold
+	//m_gold = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("gold_icon.png"), SDL_FLIP_NONE);
+	//m_gold->SetSize(60, 60);
+	//m_gold->Set2DPosition(score->Get2DPosition().x + score->GetWidth() + 50, 20);
 
-	gold = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
-	//TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
-	gold->SetSize(m_textwidth, m_textheight);
-	gold->Set2DPosition(m_gold->Get2DPosition().x + m_gold->GetWidth() + 10, 30);
-	gold->LoadFromRenderText(std::to_string(golds));
+	//gold = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
+	////TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
+	//gold->SetSize(m_textwidth, m_textheight);
+	//gold->Set2DPosition(m_gold->Get2DPosition().x + m_gold->GetWidth() + 10, 30);
+	//gold->LoadFromRenderText(std::to_string(golds));
 
-	//Guns shop
-	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("guns_shop_icon.png"), SDL_FLIP_HORIZONTAL);
-	button->SetSize(60, 60);
-	button->Set2DPosition(SCREEN_WIDTH - 230, 20);
-	button->SetOnClick([this]() {
+	////Guns shop
+	//button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("guns_shop_icon.png"), SDL_FLIP_HORIZONTAL);
+	//button->SetSize(60, 60);
+	//button->Set2DPosition(SCREEN_WIDTH - 230, 20);
+	//button->SetOnClick([this]() {
 
-		});
-	m_listButton.push_back(button);
+	//	});
+	//m_listButton.push_back(button);
 
 	//Enemies
 	for (int i = 0; i < MAX_ENEMIES; ++i) {
@@ -382,11 +382,12 @@ void GSPlay::Update(float deltaTime)
 					if (intersect(bul->Get2DPosition().x, bul->Get2DPosition().y, bul->GetWidth(), bul->GetHeight(),
 						it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight()))
 					{	//check VAR
+						
 						bul->SetBulletActive(false);
 						it->SetEnemyAlive(false);
-						gold_cnt += 10;
-						score_cnt += 5;
-						break;
+						scores += 5;
+						score->LoadFromRenderText(std::to_string(scores));
+						
 					}
 				}
 			}
@@ -460,10 +461,42 @@ void GSPlay::Update(float deltaTime)
 		time1 = 0.0f;
 	}
 
-	GSPlay::UpdateValue(golds, gold_cnt);
+	/*GSPlay::UpdateValue(golds, gold_cnt);
 	GSPlay::UpdateValue(scores, score_cnt);
 	gold->Update(deltaTime);
-	score->Update(deltaTime);
+	score->Update(deltaTime);*/
+
+	currentTime = SDL_GetTicks();
+	elapsedTime = currentTime - startTime;
+
+	if (elapsedTime >= 1000)
+	{
+		if (countdown <= 1)
+		{
+			countdown = 1;
+		}
+		countdown--;
+		startTime = currentTime;
+	}
+
+	int minutes = countdown / 60;
+	int seconds = countdown % 60;
+
+	min = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
+	//TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
+	min->SetSize(50, 50);
+	min->Set2DPosition(500, 30);
+	min->LoadFromRenderText(std::to_string(minutes) + ": ");
+
+	sec = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
+	//TTF_SizeText(100, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
+	sec->SetSize(50, 50);
+	sec->Set2DPosition(550, 30);
+	sec->LoadFromRenderText(std::to_string(seconds));
+      
+
+       
+
 }
 
 void GSPlay::drawRect(SDL_Renderer* renderer)
@@ -492,9 +525,11 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	m_background->Draw(renderer);
 	m_score->Draw(renderer);
 	score->Draw(renderer);
-	gold->Draw(renderer);
-	m_gold->Draw(renderer);
+	/*gold->Draw(renderer);*/
+	/*m_gold->Draw(renderer);*/
 	weapon->Draw(renderer);
+	min->Draw(renderer);
+	sec->Draw(renderer);
 
 	//Draw heart
 	if (playerHealth > 0)

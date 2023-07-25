@@ -38,6 +38,9 @@ public:
 	double weaponAngle = 0;
 	int m_KeyPress;
 
+	Uint32 startTime = SDL_GetTicks();
+	Uint32 currentTime, elapsedTime;
+	int countdown = 1 * 60;
 
 	int m_bullet_speed = 20;
 	int m_MouseMotion;
@@ -65,6 +68,8 @@ private:
 	std::shared_ptr<Text>		m_score;
 	std::shared_ptr<Text>		score;
 	std::shared_ptr<Text>		gold;
+	std::shared_ptr<Text>		min;
+	std::shared_ptr<Text>		sec;
 	std::shared_ptr<Sprite2D>	m_heartIcon;
 	std::vector<std::shared_ptr<Sprite2D>> m_heartIcons;
 
