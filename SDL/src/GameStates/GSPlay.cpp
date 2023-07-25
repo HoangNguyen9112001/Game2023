@@ -20,9 +20,9 @@ bool intersect(float x1, float y1, float w1, float h1, float x2, float y2, float
 //variables for decreasing health and flashing sprite during invulnerability period
 bool isInvulnerable = false;
 bool isSpriteVisible = true;
+bool hasCollided = false;
 Uint32 resetInvulnerability(Uint32 interval, void* param);
 Uint32 toggleSpriteVisibility(Uint32 interval, void* param);
-
 
 GSPlay::GSPlay()
 {
@@ -89,15 +89,15 @@ void GSPlay::Init()
 		});
 	m_listButton.push_back(button);
 
-	////End game
-	//auto texture0 = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("gameover.png"), SDL_FLIP_NONE);
-	//m_endGameButton = std::make_shared<MouseButton>(texture0, SDL_FLIP_NONE);
-	//m_endGameButton->Set2DPosition(400, 350);
-	//m_endGameButton->SetSize(100, 100);
-	//m_endGameButton->SetOnClick([this]() {
-	//	GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
-	//	});
-	
+	//End game
+	auto texture0 = ResourceManagers::GetInstance()->GetTexture("gameover.png");
+	m_endGameButton = std::make_shared<MouseButton>(texture0, SDL_FLIP_NONE);
+	m_endGameButton->Set2DPosition(400, 350);
+	m_endGameButton->SetSize(300, 300);
+	m_endGameButton->SetOnClick([this]() {
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
+		});
+
    // Player
 	texture = ResourceManagers::GetInstance()->GetTexture("player.png");
 	player = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
@@ -281,7 +281,9 @@ void GSPlay::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 			break;
 		}
 	}
-	//m_endGameButton->HandleTouchEvent(&e);
+	if (playerHealth < 1) {
+		//m_endGameButton->HandleTouchEvent(&e);
+	}
 }
 
 void GSPlay::HandleMouseMoveEvents(int x, int y)
@@ -388,26 +390,30 @@ void GSPlay::Update(float deltaTime)
 					}
 				}
 			}
+			if (intersect(player->Get2DPosition().x + 18, player->Get2DPosition().y + 17, player->GetWidth() - 36, player->GetHeight() - 37,
+				it->Get2DPosition().x + 11, it->Get2DPosition().y + 10, it->GetWidth() - 22, it->GetHeight() - 20)) {
+
+				if (!isInvulnerable) {
+					// Reduce character's health here
+					playerHealth--;
+					// Set the character to be invulnerable
+					isInvulnerable = true;
+					printf("Waitting......");
+					// Set a timer for the invulnerability cooldown period 
+
+					int invulnerabilityCooldown = 3000; // Change this value to suit your needs
+					SDL_AddTimer(invulnerabilityCooldown, resetInvulnerability, NULL);
+
+					// Set up a timer for toggling sprite visibility 
+					int flashingInterval = 200; // Adjust this value to control the flashing speed
+					SDL_AddTimer(flashingInterval, toggleSpriteVisibility, NULL);
+
+					hasCollided = true;
+				}
+
+			}
 		}
-		//if (intersect(player->Get2DPosition().x, player->Get2DPosition().y, player->GetWidth(), player->GetHeight(),
-		//	it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight())) {
-		//	if (!isInvulnerable) {
-		//		// Reduce character's health here
-		//		playerHealth--;
-		//		// Set the character to be invulnerable
-		//		isInvulnerable = true;
-
-		//		// Set a timer for the invulnerability cooldown period (in milliseconds)
-		//		int invulnerabilityCooldown = 3000; // Change this value to suit your needs
-		//		SDL_AddTimer(invulnerabilityCooldown, resetInvulnerability, NULL);
-
-		//		// Set up a timer for toggling sprite visibility (shorter interval for a noticeable flash)
-		//		//int flashingInterval = 300; // Adjust this value to control the flashing speed
-		//		//SDL_AddTimer(flashingInterval, toggleSpriteVisibility, NULL);
-
-		//	}
-		//	
-		//}
+		
 		it->Update(deltaTime);
 	}
 	//Update Bullet
@@ -460,6 +466,27 @@ void GSPlay::Update(float deltaTime)
 	score->Update(deltaTime);
 }
 
+void GSPlay::drawRect(SDL_Renderer* renderer)
+{
+	SDL_Rect hitboxRect;
+	hitboxRect.x = static_cast<int>(player->Get2DPosition().x + 18);
+	hitboxRect.y = static_cast<int>(player->Get2DPosition().y + 17);
+	hitboxRect.w = player->GetWidth() - 36;
+	hitboxRect.h = player->GetHeight() - 37;
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	SDL_RenderDrawRect(renderer, &hitboxRect);
+}
+
+void GSPlay::drawEnemyRect(SDL_Renderer* renderer)
+{
+	SDL_Rect enemyRect;
+	enemyRect.x = static_cast<int>(enemy->Get2DPosition().x + 11);
+	enemyRect.y = static_cast<int>(enemy->Get2DPosition().y + 10);
+	enemyRect.w = enemy->GetWidth() - 22;
+	enemyRect.h = enemy->GetHeight() - 20;
+	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+	SDL_RenderDrawRect(renderer, &enemyRect);
+}
 void GSPlay::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
@@ -504,6 +531,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 		
 
 	}
+	drawRect(renderer);
 
 	//Render Enemy
 	for (auto it : m_listEnemies)
@@ -511,7 +539,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 		if(it->GetEnemyLive())
 			it->Draw(renderer);
 	}
-
+	drawEnemyRect(renderer);
 	//Render Bullet
 	for (auto it : m_listBullets)
 	{
@@ -523,23 +551,33 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 
 //Reset invulnerable state
 Uint32 resetInvulnerability(Uint32 interval, void* param) {
+	printf("DONE 3s.................");
 	isInvulnerable = false;
+	hasCollided = false;
 	if (!isInvulnerable) {
+		// Reset the sprite visibility to be visible
+		isSpriteVisible = true;
 		return 0;
 	}
 	return interval;
-
 }
 //Toggle sprite visibility to make flashing effect
 Uint32 toggleSpriteVisibility(Uint32 interval, void* param) {
-	isSpriteVisible = !isSpriteVisible; 
+	if (isInvulnerable && hasCollided) {
+		isSpriteVisible = !isSpriteVisible;
+	}
 	if (isInvulnerable) {
 		return interval;
 	}
 	isSpriteVisible = true;
 	return 0;
+	/*isSpriteVisible = !isSpriteVisible;
+	if (isInvulnerable) {
+		return interval;
+	}
+	isSpriteVisible = true;
+	return 0;*/
 }
-
 
 
 void GSPlay::EnemyAutoMove(std::shared_ptr<SpriteAnimation> e)
@@ -551,7 +589,7 @@ void GSPlay::EnemyAutoMove(std::shared_ptr<SpriteAnimation> e)
 	//tinh khoang cach
 	float dist = distance(player->Get2DPosition().x, player->Get2DPosition().y, e->Get2DPosition().x, e->Get2DPosition().y);
 
-	if (dist > 20)
+	if (dist > 10)
 	{
 		float a = e->Get2DPosition().x;
 		a += cos(angle) * m_enemySpeed;

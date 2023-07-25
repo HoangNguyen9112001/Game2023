@@ -25,6 +25,8 @@ public:
 	void	HandleTouchEvents(SDL_Event& e, bool bIsPressed) override;
 	void	HandleMouseMoveEvents(int x, int y) override;
 	void	Update(float deltaTime) override;
+	void	drawRect(SDL_Renderer* renderer);
+	void	drawEnemyRect(SDL_Renderer* renderer);
 	void	Draw(SDL_Renderer* renderer) override;
 	void	EnemyAutoMove(std::shared_ptr<SpriteAnimation> obj);
 	
