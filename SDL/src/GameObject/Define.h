@@ -1,7 +1,7 @@
 #pragma once
 #define SCREEN_WIDTH 1000
 #define SCREEN_HEIDHT 800
-#define MAX_ENEMIES 5
+#define MAX_ENEMIES 4
 #define MAX_BULLETS 20
 
 // Define health bar dimensions

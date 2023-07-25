@@ -93,6 +93,9 @@
     <ClCompile Include="src\GameStates\Credit.cpp">
       <Filter>Source Files\GameState</Filter>
     </ClCompile>
+    <ClCompile Include="GSPause.cpp">
+      <Filter>Source Files\GameState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameObject\BaseObject.h">
@@ -162,6 +165,9 @@
       <Filter>Source Files\GameState</Filter>
     </ClInclude>
     <ClInclude Include="src\GameStates\GSOption.h">
+      <Filter>Source Files\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="GSPause.h">
       <Filter>Source Files\GameState</Filter>
     </ClInclude>
   </ItemGroup>

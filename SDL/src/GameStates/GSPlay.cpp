@@ -85,18 +85,18 @@ void GSPlay::Init()
 	button->SetSize(60, 60);
 	button->Set2DPosition(SCREEN_WIDTH - 150, 20);
 	button->SetOnClick([this]() {
-		
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PAUSE);
 		});
 	m_listButton.push_back(button);
 
-	//End game
-	auto texture0 = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("gameover.png"), SDL_FLIP_NONE);
-	m_endGameButton = std::make_shared<MouseButton>(texture0, SDL_FLIP_NONE);
-	m_endGameButton->Set2DPosition(400, 350);
-	m_endGameButton->SetSize(100, 100);
-	m_endGameButton->SetOnClick([this]() {
-		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
-		});
+	////End game
+	//auto texture0 = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("gameover.png"), SDL_FLIP_NONE);
+	//m_endGameButton = std::make_shared<MouseButton>(texture0, SDL_FLIP_NONE);
+	//m_endGameButton->Set2DPosition(400, 350);
+	//m_endGameButton->SetSize(100, 100);
+	//m_endGameButton->SetOnClick([this]() {
+	//	GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
+	//	});
 	
    // Player
 	texture = ResourceManagers::GetInstance()->GetTexture("player.png");
@@ -281,7 +281,7 @@ void GSPlay::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 			break;
 		}
 	}
-	m_endGameButton->HandleTouchEvent(&e);
+	//m_endGameButton->HandleTouchEvent(&e);
 }
 
 void GSPlay::HandleMouseMoveEvents(int x, int y)
@@ -289,7 +289,7 @@ void GSPlay::HandleMouseMoveEvents(int x, int y)
 
 }
 
-//float time1 = 0.0f;
+float time1 = 0.0f;
 void GSPlay::Update(float deltaTime)
 {
 	switch (m_KeyPress)//Handle Key event
@@ -389,25 +389,25 @@ void GSPlay::Update(float deltaTime)
 				}
 			}
 		}
-		if (intersect(player->Get2DPosition().x, player->Get2DPosition().y, player->GetWidth(), player->GetHeight(),
-			it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight())) {
-			if (!isInvulnerable) {
-				// Reduce character's health here
-				playerHealth--;
-				// Set the character to be invulnerable
-				isInvulnerable = true;
+		//if (intersect(player->Get2DPosition().x, player->Get2DPosition().y, player->GetWidth(), player->GetHeight(),
+		//	it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight())) {
+		//	if (!isInvulnerable) {
+		//		// Reduce character's health here
+		//		playerHealth--;
+		//		// Set the character to be invulnerable
+		//		isInvulnerable = true;
 
-				// Set a timer for the invulnerability cooldown period (in milliseconds)
-				int invulnerabilityCooldown = 3000; // Change this value to suit your needs
-				SDL_AddTimer(invulnerabilityCooldown, resetInvulnerability, NULL);
+		//		// Set a timer for the invulnerability cooldown period (in milliseconds)
+		//		int invulnerabilityCooldown = 3000; // Change this value to suit your needs
+		//		SDL_AddTimer(invulnerabilityCooldown, resetInvulnerability, NULL);
 
-				// Set up a timer for toggling sprite visibility (shorter interval for a noticeable flash)
-				//int flashingInterval = 300; // Adjust this value to control the flashing speed
-				//SDL_AddTimer(flashingInterval, toggleSpriteVisibility, NULL);
+		//		// Set up a timer for toggling sprite visibility (shorter interval for a noticeable flash)
+		//		//int flashingInterval = 300; // Adjust this value to control the flashing speed
+		//		//SDL_AddTimer(flashingInterval, toggleSpriteVisibility, NULL);
 
-			}
-			
-		}
+		//	}
+		//	
+		//}
 		it->Update(deltaTime);
 	}
 	//Update Bullet
@@ -431,6 +431,27 @@ void GSPlay::Update(float deltaTime)
 			}
 		}
 		it->Update(deltaTime);
+	}
+
+	// Spaw Enemies
+
+	time1 += deltaTime;
+	
+	if (time1 >= 1.5f)
+	{
+		//Spawn
+		for (int i = 0; i < MAX_ENEMIES; ++i) {
+
+			auto texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
+			enemy = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
+			enemy->SetFlip(SDL_FLIP_NONE);
+			enemy->SetSize(40, 50);
+			enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIDHT);
+			enemy->SetEnemyAlive(true);
+			m_listEnemies.push_back(enemy);
+		}
+
+		time1 = 0.0f;
 	}
 
 	GSPlay::UpdateValue(golds, gold_cnt);
@@ -462,9 +483,9 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 		m_heartIcons[2]->Draw(renderer);
 	}
 
-	if (playerHealth < 1) {
+	/*if (playerHealth < 1) {
 		m_endGameButton->Draw(renderer);
-	}
+	}*/
 	//Render Button
 	for (auto it : m_listButton)
 	{

@@ -4,6 +4,7 @@
 #include "GSPlay.h"
 #include "Credit.h"
 #include "GSOption.h"
+#include "GSPause.h"
 GameStateBase::GameStateBase(StateType stateType) : m_stateType(stateType)
 {}
 
@@ -33,6 +34,9 @@ std::shared_ptr<GameStateBase> GameStateBase::CreateState(StateType stt)
 	case StateType::STATE_OPTION:
 		//GSOPTION
 		gs = std::make_shared<GSOption>();
+	case StateType::STATE_PAUSE:
+		//GSOPTION
+		gs = std::make_shared<GSPause>();
 		break;
 	default:
 		break;
