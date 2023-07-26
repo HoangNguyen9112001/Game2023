@@ -51,7 +51,7 @@ void GSPlay::Init()
 
 	//background
 
-	auto texture = ResourceManagers::GetInstance()->GetTexture("brick-bgr.png");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("Asset/background4.png");
 	m_background = std::make_shared<Sprite2D>( texture, SDL_FLIP_NONE);
 	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_background->Set2DPosition(0, 0);
@@ -142,12 +142,12 @@ void GSPlay::Init()
 	
 	//SCORE
 	m_textColor = { 255, 255, 204 };
-	m_score = std::make_shared<Text>("Data/calibri.ttf", m_textColor, 20);
+	m_score = std::make_shared<Text>("Data/MochiyPopOne.ttf", m_textColor, 20);
 	m_score->SetSize(75, 30);
 	m_score->Set2DPosition((SCREEN_WIDTH - m_score->GetWidth()) / 3, 45);
 	m_score->LoadFromRenderText("Score: ");
 	
-	score = std::make_shared<Text>("Data/calibrib.ttf", m_textColor, 14);
+	score = std::make_shared<Text>("Data/MochiyPopOne.ttf", m_textColor, 14);
 	score->SetSize(50,50);
 	score->Set2DPosition(m_score->Get2DPosition().x + m_score->GetWidth() + 5, 30);
 	score->LoadFromRenderText(std::to_string(scores));
@@ -361,9 +361,9 @@ void GSPlay::Update(float deltaTime)
 			//Move pplayer
 			switch (m_KeyPress) {
 			case 1: // Move left
-				if (player->Get2DPosition().x < 0)
+				if (player->Get2DPosition().x < 50)
 				{
-					player->Set2DPosition(0, player->Get2DPosition().y);
+					player->Set2DPosition(50, player->Get2DPosition().y);
 				}
 				else {
 					playerDirection = -1;
@@ -378,9 +378,9 @@ void GSPlay::Update(float deltaTime)
 					it->MoveDown(deltaTime);
 				break;
 			case 4: // Move right
-				if (player->Get2DPosition().x > SCREEN_WIDTH - player->GetWidth())
+				if (player->Get2DPosition().x > SCREEN_WIDTH - player->GetWidth() - 50)
 				{
-					player->Set2DPosition(SCREEN_WIDTH - player->GetWidth(), player->Get2DPosition().y);
+					player->Set2DPosition(SCREEN_WIDTH - player->GetWidth() -50, player->Get2DPosition().y);
 				}
 				else {
 					playerDirection = 1;
@@ -507,13 +507,13 @@ void GSPlay::Update(float deltaTime)
 		int seconds = countdown % 60;
 
 
-		min = std::make_shared<Text>("Data/calibrib.ttf", m_textColor, 14);
+		min = std::make_shared<Text>("Data/MochiyPopOne.ttf", m_textColor, 14);
 		//TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
 		min->SetSize(50, 50);
 		min->Set2DPosition(500, 30);
 		min->LoadFromRenderText(std::to_string(minutes) + ": ");
 
-		sec = std::make_shared<Text>("Data/calibrib.ttf", m_textColor, 14);
+		sec = std::make_shared<Text>("Data/MochiyPopOne.ttf", m_textColor, 14);
 		//TTF_SizeText(100, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
 		sec->SetSize(50, 50);
 		sec->Set2DPosition(550, 30);
@@ -596,7 +596,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 		
 
 	}
-	drawRect(renderer);
+	//drawRect(renderer);
 
 	//Render Enemy
 	for (auto it : m_listEnemies)
@@ -604,7 +604,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 		if(it->GetEnemyLive())
 			it->Draw(renderer);
 	}
-	drawEnemyRect(renderer);
+	//drawEnemyRect(renderer);
 	//Render Bullet
 	for (auto it : m_listBullets)
 	{

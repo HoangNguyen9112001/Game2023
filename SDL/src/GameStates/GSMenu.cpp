@@ -77,7 +77,7 @@ void GSMenu::Init()
 	// game title
 	///Set Font
 	m_textColor = { 0, 0, 0 };
-	m_textGameName = std::make_shared<Text>("Data/font2.ttf", m_textColor, 28);
+	m_textGameName = std::make_shared<Text>("Data/MochiyPopOne.ttf", m_textColor, 28);
 	m_textGameName->SetSize(500, 100);
 	m_textGameName->Set2DPosition((SCREEN_WIDTH - m_textGameName->GetWidth())/2, SCREEN_HEIGHT / 2 - 300);
 	m_textGameName->LoadFromRenderText("Monster Survivor");
