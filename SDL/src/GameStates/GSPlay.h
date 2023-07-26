@@ -3,6 +3,7 @@
 #include "GameObject/MouseButton.h"
 #include"GameObject/Text.h"
 #include"Timer.h"
+#include "Sound.h"
 
 class Sprite2D;
 class SpriteAnimation;
@@ -63,6 +64,8 @@ private:
 	std::shared_ptr<Sprite2D>	m_gold;
 	std::shared_ptr<Sprite2D>	weapon;
 	std::shared_ptr<Sprite2D>	bullet;
+
+	std::shared_ptr<Sound> BgSound;
 
 	std::shared_ptr<Text>		m_score;
 	std::shared_ptr<Text>		score;

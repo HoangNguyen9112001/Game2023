@@ -64,7 +64,8 @@ void GSPause::Init()
 	button->SetSize(70, 70);
 	button->Set2DPosition(m_boder->Get2DPosition().x + 375, m_boder->Get2DPosition().y + 120);
 	button->SetOnClick([this]() {
-		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PLAY);
+		GameStateMachine::GetInstance()->PopState();
+		//GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PLAY);
 		});
 	m_listButton.push_back(button);
 

@@ -23,6 +23,11 @@ void GSMenu::Init()
 	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_background->Set2DPosition(0, 0);
 
+	//Sound
+	auto m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
+	m_Sound->PlaySound();
+	m_Sound->LoadSound("Data/Sounds/Alarm01.wav");
+
 	// play button
 	texture = ResourceManagers::GetInstance()->GetTexture("button/001.png");
 	std::shared_ptr<MouseButton> btnPlay = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
@@ -31,6 +36,10 @@ void GSMenu::Init()
 	btnPlay->Set2DPosition((SCREEN_WIDTH - btnPlay->GetWidth())/2, (SCREEN_HEIGHT - btnPlay->GetHeight()) / 2);
 	btnPlay->SetOnClick([]() {
 		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PICKPLAYER);
+		//auto m_Sound = std::make_shared<Sound>("Data/Sounds/BgSoundPlay.mp3");
+		/*m_Sound->PlaySound();
+		m_Sound->LoadSound("Data/Sounds/BgSoundPlay.mp3");*/
+		
 		});
 	m_listButton.push_back(btnPlay);
 
@@ -72,8 +81,7 @@ void GSMenu::Init()
 	m_textGameName->SetSize(500, 100);
 	m_textGameName->Set2DPosition((SCREEN_WIDTH - m_textGameName->GetWidth())/2, SCREEN_HEIGHT / 2 - 300);
 	m_textGameName->LoadFromRenderText("Monster Survivor");
-	m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
-	m_Sound->PlaySound();
+	
 }
 
 void GSMenu::Exit()
@@ -84,13 +92,13 @@ void GSMenu::Exit()
 
 void GSMenu::Pause()
 {
-	//m_Sound->StopSound();
+	m_Sound->StopSound();
 
 }
 
 void GSMenu::Resume()
 {
-	//m_Sound->PlaySound();
+	m_Sound->PlaySound();
 }
 
 

@@ -116,7 +116,7 @@ void GSPlay::Init()
 	m_endGameButton->SetSize(900, 450);
 	m_endGameButton->SetOnClick([this]() {
 		isGameOver = false;
-		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_ENDGAME);
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
 		});
 
    // Pick Player
@@ -196,6 +196,11 @@ void GSPlay::Init()
 	//Camera::GetInstance()->SetTarget(obj);
 	
 
+	// Sound
+	auto BgSound = std::make_shared<Sound>("Data/Sounds/BgSoundPlay.mp3");
+	BgSound->PlaySound();
+	BgSound->LoadSound("Data/Sounds/BgSoundPlay.mp3");
+
 	m_KeyPress = 0;
 }
 
@@ -206,12 +211,12 @@ void GSPlay::Exit()
 
 void GSPlay::Pause()
 {
-
+	BgSound->StopSound();
 }
 
 void GSPlay::Resume()
 {
-	
+	BgSound->ResumeSound();
 }
 
 void GSPlay::HandleEvents()
