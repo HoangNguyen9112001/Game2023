@@ -51,7 +51,7 @@ void GSPlay::Init()
 
 	//background
 
-	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_city.png");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("brick-bgr.png");
 	m_background = std::make_shared<Sprite2D>( texture, SDL_FLIP_NONE);
 	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_background->Set2DPosition(0, 0);
@@ -100,6 +100,7 @@ void GSPlay::Init()
 	m_victoryIcon = std::make_shared<Sprite2D>(textureVictory, SDL_FLIP_NONE);
 	m_victoryIcon->Set2DPosition(SCREEN_WIDTH/2 - 350, SCREEN_HEIGHT/2 -300 );
 	m_victoryIcon->SetSize(700, 600);
+
 	auto textureVictoryButton = ResourceManagers::GetInstance()->GetTexture("button/032.png");
 	m_nextButton = std::make_shared<MouseButton>(textureVictoryButton, SDL_FLIP_NONE);
 	m_nextButton->Set2DPosition(SCREEN_WIDTH / 2 - 25, SCREEN_HEIGHT / 2 + 50);
@@ -140,14 +141,13 @@ void GSPlay::Init()
 	}
 	
 	//SCORE
-	m_textColor = { 0, 0, 255 };
+	m_textColor = { 255, 255, 204 };
 	m_score = std::make_shared<Text>("Data/calibri.ttf", m_textColor, 20);
 	m_score->SetSize(75, 30);
 	m_score->Set2DPosition((SCREEN_WIDTH - m_score->GetWidth()) / 3, 45);
 	m_score->LoadFromRenderText("Score: ");
 	
 	score = std::make_shared<Text>("Data/calibrib.ttf", m_textColor, 14);
-	//TTF_SizeText(m_font, std::to_string(scores).c_str(), &m_textwidth, &m_textheight);
 	score->SetSize(50,50);
 	score->Set2DPosition(m_score->Get2DPosition().x + m_score->GetWidth() + 5, 30);
 	score->LoadFromRenderText(std::to_string(scores));
@@ -302,7 +302,7 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 
 void GSPlay::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 {
-	for (auto button : m_listButton)
+	for (auto& button : m_listButton)
 	{
 		if (button->HandleTouchEvent(&e))
 		{
@@ -413,14 +413,15 @@ void GSPlay::Update(float deltaTime)
 							it->SetEnemyAlive(false);
 							scores += 5;
 							score->LoadFromRenderText(std::to_string(scores));
-
 						}
 					}
 				}
+
+				//enemy VAR player
 				if (intersect(player->Get2DPosition().x + 18, player->Get2DPosition().y + 17, player->GetWidth() - 36, player->GetHeight() - 37,
 					it->Get2DPosition().x + 11, it->Get2DPosition().y + 10, it->GetWidth() - 22, it->GetHeight() - 20)) {
 
-					if (!isInvulnerable) {
+					if (!isInvulnerable) { //nếu player không trong trạng thái không thể bị chỉ định 
 						// Reduce character's health here
 						playerHealth--;
 						// Set the character to be invulnerable
@@ -438,7 +439,6 @@ void GSPlay::Update(float deltaTime)
 
 				}
 			}
-
 			it->Update(deltaTime);
 		}
 		//Update Bullet
@@ -468,9 +468,9 @@ void GSPlay::Update(float deltaTime)
 
 		time1 += deltaTime;
 
+		//spawn enemy
 		if (time1 >= 1.5f)
 		{
-			//Spawn
 			for (int i = 0; i < MAX_ENEMIES; ++i) {
 
 				auto texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
@@ -484,11 +484,6 @@ void GSPlay::Update(float deltaTime)
 
 			time1 = 0.0f;
 		}
-
-		/*GSPlay::UpdateValue(golds, gold_cnt);
-		GSPlay::UpdateValue(scores, score_cnt);
-		gold->Update(deltaTime);
-		score->Update(deltaTime);*/
 
 		currentTime = SDL_GetTicks();
 		elapsedTime = currentTime - startTime;
@@ -522,7 +517,7 @@ void GSPlay::Update(float deltaTime)
 		if (minutes<1 && seconds <1) {
 			isGameOver = true;
 		}
-
+		if (scores > bestScore) bestScore = scores;
 	}
 
 	if (playerHealth < 1) {
@@ -552,6 +547,7 @@ void GSPlay::drawEnemyRect(SDL_Renderer* renderer)
 	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 	SDL_RenderDrawRect(renderer, &enemyRect);
 }
+
 void GSPlay::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
@@ -651,7 +647,6 @@ Uint32 toggleSpriteVisibility(Uint32 interval, void* param) {
 	return 0;*/
 }
 
-
 void GSPlay::EnemyAutoMove(std::shared_ptr<SpriteAnimation> e)
 {
 
@@ -674,6 +669,10 @@ void GSPlay::EnemyAutoMove(std::shared_ptr<SpriteAnimation> e)
 	
 }
 
+int GSPlay::GetHighScore()
+{
+	return bestScore;
+}
 
 void GSPlay::UpdateValue(int& value, int upd)
 {

@@ -14,13 +14,13 @@ GSEndGame::~GSEndGame() {
 
 void GSEndGame::Init() {
 	//background
-	eg_bg = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("bg_menu.tga"), SDL_FLIP_NONE);
+	eg_bg = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("brick-bgr.png"), SDL_FLIP_NONE);
 	eg_bg->Set2DPosition(0, 0);
 	eg_bg->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	//Button 
 	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("button/006.png"), SDL_FLIP_NONE);
 	button->SetSize(100, 100);
-	button->Set2DPosition(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 50);
+	button->Set2DPosition(SCREEN_WIDTH / 4 - 50, SCREEN_HEIGHT / 2 - 50);
 	button->SetOnClick([this]() {
 		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
 		});

@@ -37,8 +37,9 @@ std::shared_ptr<GameStateBase> GameStateBase::CreateState(StateType stt)
 	case StateType::STATE_OPTION:
 		//GSOPTION
 		gs = std::make_shared<GSOption>();
+		break;
 	case StateType::STATE_PAUSE:
-		//GSOPTION
+		//GSPAUSE
 		gs = std::make_shared<GSPause>();
 		break;
 	case StateType::STATE_ENDGAME:

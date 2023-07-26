@@ -30,7 +30,9 @@ public:
 	void	Draw(SDL_Renderer* renderer) override;
 	void	EnemyAutoMove(std::shared_ptr<SpriteAnimation> obj);
 	
-
+	int		GetHighScore();
+	int		bestScore = 0;
+	//int		SetHighScore(int sc);
 	int m_enemySpeed;
 
 	int playerHealth = 3;
@@ -45,16 +47,13 @@ public:
 	int m_bullet_speed = 20;
 	int m_MouseMotion;
 
-	TTF_Font* m_font = TTF_OpenFont("Data/font2.ttf", 16);
 	int m_lastShootTime;
 	int m_shootDelay = 5;
 	
 	void UpdateValue(int& value, int upd);
 private:
-	int scores = 0,
-		golds = 0;
-	int gold_cnt = 0,
-		score_cnt = 0;
+	int scores = 0;
+
 	int m_textwidth = 20,
 		m_textheight = 50;
 

@@ -13,14 +13,14 @@ GSPickPlayer::~GSPickPlayer()
 void GSPickPlayer::Init()
 {
 	//backgr
-	m_background = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("bg_city.png"), SDL_FLIP_NONE);
+	m_background = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("brick-bgr.png"), SDL_FLIP_NONE);
 	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_background->Set2DPosition(0, 0);
 
 	//border1
 	border1 = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("khung.png"), SDL_FLIP_NONE);
 	border1->Set2DPosition(0, 80);
-	border1->SetSize(SCREEN_WIDTH / 2, 500);
+	border1->SetSize(SCREEN_WIDTH / 2, 600);
 	border1->SetOnClick([this]() {
 		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PLAY);
 		i = 0;
@@ -29,7 +29,7 @@ void GSPickPlayer::Init()
 	//border2
 	border2 = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("khung.png"), SDL_FLIP_NONE);
 	border2->Set2DPosition(SCREEN_WIDTH / 2, 80);
-	border2->SetSize(SCREEN_WIDTH / 2, 500);
+	border2->SetSize(SCREEN_WIDTH / 2, 600);
 	border2->SetOnClick([this]() {
 		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PLAY);
 		i = 1;
@@ -49,7 +49,7 @@ void GSPickPlayer::Init()
 							border2->Get2DPosition().y + (border2->GetHeight() - player2->GetHeight()) / 2);
 	//back to menu
 	std::shared_ptr<MouseButton> button = std::make_shared<MouseButton>(ResourceManagers::
-											GetInstance()->GetTexture("button/021.png"), SDL_FLIP_NONE);
+											GetInstance()->GetTexture("button/006.png"), SDL_FLIP_NONE);
 	button->SetSize(70, 70);
 	button->Set2DPosition(75, 20);
 	button->SetOnClick([this]() {

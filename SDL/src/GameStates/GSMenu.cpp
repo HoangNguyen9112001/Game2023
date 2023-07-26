@@ -46,7 +46,7 @@ void GSMenu::Init()
 	m_listButton.push_back(btnClose);
 
 	//Setting game
-	texture = ResourceManagers::GetInstance()->GetTexture("button/003.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("button/009.png");
 	std::shared_ptr<MouseButton> btnOption = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	btnOption->SetSize(100, 100);
 	btnOption->Set2DPosition((SCREEN_WIDTH - btnOption->GetWidth()) / 2, SCREEN_HEIGHT / 2 + 170);
@@ -72,8 +72,8 @@ void GSMenu::Init()
 	m_textGameName->SetSize(500, 100);
 	m_textGameName->Set2DPosition((SCREEN_WIDTH - m_textGameName->GetWidth())/2, SCREEN_HEIGHT / 2 - 300);
 	m_textGameName->LoadFromRenderText("Monster Survivor");
-	//m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
-	//m_Sound->PlaySound();
+	m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
+	m_Sound->PlaySound();
 }
 
 void GSMenu::Exit()
@@ -126,7 +126,7 @@ void GSMenu::Update(float deltaTime)
 		time = 0.0f;
 	}
 	m_background->Update(deltaTime);
-	for (auto it : m_listButton)
+	for (auto& it : m_listButton)
 	{
 		it->Update(deltaTime);
 	}
@@ -135,7 +135,7 @@ void GSMenu::Update(float deltaTime)
 void GSMenu::Draw(SDL_Renderer* renderer)
 {
 	m_background->Draw(renderer);
-	for (auto it : m_listButton)
+	for (auto& it : m_listButton)
 	{
 		it->Draw(renderer);
 	}

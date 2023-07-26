@@ -18,13 +18,13 @@ void GSPause::Init()
 {
 
 	//background
-	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_city.png");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("brick-bgr.png");
 	m_background = std::make_shared<Sprite2D>(texture, SDL_FLIP_NONE);
 	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	m_background->Set2DPosition(0, 0);
 
 	//Boder
-	m_boder = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("khung.png"), SDL_FLIP_NONE);
+	m_boder = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("menu_opt.png"), SDL_FLIP_NONE);
 	m_boder->SetSize(800, 300);
 	m_boder->Set2DPosition((SCREEN_WIDTH - m_boder->GetWidth()) / 2, (SCREEN_HEIGHT - m_boder->GetHeight()) / 2);
 
@@ -45,7 +45,7 @@ void GSPause::Init()
 
 	m_soundButtonPlay->SetOnClick([this]() {
 		Mix_PauseMusic();
-		isPlayingSound = false;
+		GSPause::SetisPlayingSound(false);
 		});
 
 	m_listButton.push_back(m_soundButtonPlay);
@@ -55,7 +55,7 @@ void GSPause::Init()
 
 	m_soundButtonOff->SetOnClick([this]() {
 		Mix_ResumeMusic();
-		isPlayingSound = true;
+		GSPause::SetisPlayingSound(true);
 		});
 	m_listButton.push_back(m_soundButtonOff);
 
@@ -69,7 +69,7 @@ void GSPause::Init()
 	m_listButton.push_back(button);
 
 	//title
-	color = { 0, 0, 0 };
+	color = { 255, 255, 204 };
 	m_textGameSetting = std::make_shared<Text>("Data/font2.ttf", color, 28);
 	m_textGameSetting->SetSize(300, 70);
 	m_textGameSetting->Set2DPosition((SCREEN_WIDTH - m_textGameSetting->GetWidth()) / 2, m_boder->Get2DPosition().y - 100);
@@ -103,7 +103,7 @@ void	GSPause::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 		{
 			break;
 		}
-		if (isPlayingSound)
+		if (GetisPlayingSound())
 		{
 			m_soundButtonPlay->HandleTouchEvent(&e);
 		}
@@ -118,6 +118,9 @@ void	GSPause::HandleMouseMoveEvents(int x, int y)
 }
 void	GSPause::Update(float deltaTime)
 {
+	m_soundButtonOff->Update(deltaTime);
+	m_soundButtonPlay->Update(deltaTime);
+	
 }
 void	GSPause::Draw(SDL_Renderer* renderer)
 {
@@ -130,7 +133,7 @@ void	GSPause::Draw(SDL_Renderer* renderer)
 		it->Draw(renderer);
 	}
 
-	if (isPlayingSound)
+	if (GetisPlayingSound())
 	{
 		m_soundButtonPlay->Draw(renderer);
 	}
@@ -138,4 +141,15 @@ void	GSPause::Draw(SDL_Renderer* renderer)
 	{
 		m_soundButtonOff->Draw(renderer);
 	}
+	m_textGameSetting->Draw(renderer);
+}
+
+void GSPause::SetisPlayingSound(bool isPlaying)
+{
+	isPlayingSound = isPlaying;
+}
+
+bool GSPause::GetisPlayingSound()
+{
+	return isPlayingSound;
 }

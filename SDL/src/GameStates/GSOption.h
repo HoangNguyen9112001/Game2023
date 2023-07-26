@@ -6,7 +6,8 @@
 #include "GameObject/Text.h"
 #include "Sound.h"
 #include "GSMenu.h"
-
+#include "Text.h"
+#include "GSPlay.h"
 class GSOption : public GameStateBase {
 public:
 	GSOption();
@@ -27,7 +28,7 @@ public:
 
 private:
 
-	std::shared_ptr<Sprite2D>				opt_bg, menu_opt;
-	std::list<std::shared_ptr<MouseButton>>	opt_bt;
-	std::shared_ptr<MouseButton>			button, sfx_on_bt, sfx_off_bt, music_on_bt, music_off_bt;
+	std::shared_ptr<Sprite2D>				opt_bg, m_high_score;
+	std::shared_ptr<MouseButton>			button;
+	std::shared_ptr<Text>					best_score;
 };
