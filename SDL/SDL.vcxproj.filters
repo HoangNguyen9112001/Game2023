@@ -96,6 +96,12 @@
     <ClCompile Include="GSPause.cpp">
       <Filter>Source Files\GameState</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameStates\GSPickPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameStates\GSEndGame.cpp">
+      <Filter>Source Files\GameState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameObject\BaseObject.h">
@@ -168,6 +174,12 @@
       <Filter>Source Files\GameState</Filter>
     </ClInclude>
     <ClInclude Include="GSPause.h">
+      <Filter>Source Files\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameStates\GSPickPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameStates\GSEndGame.h">
       <Filter>Source Files\GameState</Filter>
     </ClInclude>
   </ItemGroup>

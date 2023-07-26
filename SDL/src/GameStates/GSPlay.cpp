@@ -24,6 +24,9 @@ bool hasCollided = false;
 Uint32 resetInvulnerability(Uint32 interval, void* param);
 Uint32 toggleSpriteVisibility(Uint32 interval, void* param);
 
+//Varialbe to check if the game is over	
+bool isGameOver = false;
+
 
 //player is picked
 extern int i;
@@ -95,10 +98,11 @@ void GSPlay::Init()
 	//End game
 	auto texture0 = ResourceManagers::GetInstance()->GetTexture("gameover.png");
 	m_endGameButton = std::make_shared<MouseButton>(texture0, SDL_FLIP_NONE);
-	m_endGameButton->Set2DPosition(400, 350);
-	m_endGameButton->SetSize(300, 300);
+	m_endGameButton->Set2DPosition(SCREEN_WIDTH / 2 - 450, SCREEN_HEIGHT / 2 - 225);
+	m_endGameButton->SetSize(900, 450);
 	m_endGameButton->SetOnClick([this]() {
-		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
+		isGameOver = false;
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_ENDGAME);
 		});
 
    // Pick Player
@@ -293,7 +297,7 @@ void GSPlay::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 		}
 	}
 	if (playerHealth < 1) {
-		//m_endGameButton->HandleTouchEvent(&e);
+		m_endGameButton->HandleTouchEvent(&e);
 	}
 }
 
@@ -305,203 +309,206 @@ void GSPlay::HandleMouseMoveEvents(int x, int y)
 float time1 = 0.0f;
 void GSPlay::Update(float deltaTime)
 {
-	switch (m_KeyPress)//Handle Key event
-	{
-	default:
-		break;
-	}
-	//Update Button
-	for (auto& it : m_listButton)
-	{
-		it->Update(deltaTime);
-	}
-	//Update Player
-	for (auto& it : m_listAnimation)
-	{
-		// Gun rotation
-		weapon = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("weaponR1.png"),
-											playerDirection == 1 ? SDL_FLIP_NONE : SDL_FLIP_VERTICAL);
-		weapon->SetRotation(weaponAngle);
-		weapon->SetSize(50, 20);
-
-		//get hand posision
-
-		double handX = player->Get2DPosition().x + player->GetWidth() / 2 + cos(weaponAngle * M_PI / 180) * 25;
-		double handY = player->Get2DPosition().y + player->GetHeight() / 2 + sin(weaponAngle * M_PI / 180) * 25;
-
-		//set gun on hand
-		weapon->Set2DPosition(handX - weapon->GetWidth() / 2, handY - weapon->GetHeight() / 2);
-
-		//Move pplayer
-		switch (m_KeyPress) {
-		case 1: // Move left
-			if (player->Get2DPosition().x < 0)
-			{
-				player->Set2DPosition(0, player->Get2DPosition().y);
-			}
-			else {
-				playerDirection = -1;
-				it->MoveLeft(deltaTime);
-			}
-			break;
-		case 2: // Move down
-			if (player->Get2DPosition().y > SCREEN_HEIGHT - player->GetHeight()) {
-				player->Set2DPosition(player->Get2DPosition().x, SCREEN_HEIGHT - player->GetHeight());
-			}
-			else
-				it->MoveDown(deltaTime);
-			break;
-		case 4: // Move right
-			if (player->Get2DPosition().x > SCREEN_WIDTH - player->GetWidth())
-			{
-				player->Set2DPosition(SCREEN_WIDTH - player->GetWidth(), player->Get2DPosition().y);
-			}
-			else {
-				playerDirection = 1;
-				it->MoveRight(deltaTime);
-			}
-			break;
-		case 8: // Move up
-			if (player->Get2DPosition().y < 0) {
-				player->Set2DPosition(player->Get2DPosition().x, 0);
-			}
-			else
-				it->MoveUp(deltaTime);
-			break;
+	if (!isGameOver) {
+		switch (m_KeyPress)//Handle Key event
+		{
 		default:
 			break;
 		}
-		it->Update(deltaTime);
+		//Update Button
+		for (auto& it : m_listButton)
+		{
+			it->Update(deltaTime);
+		}
+		//Update Player
+		for (auto& it : m_listAnimation)
+		{
+			// Gun rotation
+			weapon = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("weaponR1.png"),
+				playerDirection == 1 ? SDL_FLIP_NONE : SDL_FLIP_VERTICAL);
+			weapon->SetRotation(weaponAngle);
+			weapon->SetSize(50, 20);
 
-	}
-	//time1 += deltaTime;
-	//Update Enemy
-	for (auto& it : m_listEnemies) {
-		GSPlay::EnemyAutoMove(it);
-		// Collision with Bullet
-		if (it->GetEnemyLive()) { // if enemy is alive
-			for (auto& bul : m_listBullets)
-			{
-				if (bul->GetBulletActive()) // if bullet is flying
+			//get hand posision
+
+			double handX = player->Get2DPosition().x + player->GetWidth() / 2 + cos(weaponAngle * M_PI / 180) * 25;
+			double handY = player->Get2DPosition().y + player->GetHeight() / 2 + sin(weaponAngle * M_PI / 180) * 25;
+
+			//set gun on hand
+			weapon->Set2DPosition(handX - weapon->GetWidth() / 2, handY - weapon->GetHeight() / 2);
+
+			//Move pplayer
+			switch (m_KeyPress) {
+			case 1: // Move left
+				if (player->Get2DPosition().x < 0)
 				{
-					if (intersect(bul->Get2DPosition().x, bul->Get2DPosition().y, bul->GetWidth(), bul->GetHeight(),
-						it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight()))
-					{	//check VAR
-						
-						bul->SetBulletActive(false);
-						it->SetEnemyAlive(false);
-						scores += 5;
-						score->LoadFromRenderText(std::to_string(scores));
-						
+					player->Set2DPosition(0, player->Get2DPosition().y);
+				}
+				else {
+					playerDirection = -1;
+					it->MoveLeft(deltaTime);
+				}
+				break;
+			case 2: // Move down
+				if (player->Get2DPosition().y > SCREEN_HEIGHT - player->GetHeight()) {
+					player->Set2DPosition(player->Get2DPosition().x, SCREEN_HEIGHT - player->GetHeight());
+				}
+				else
+					it->MoveDown(deltaTime);
+				break;
+			case 4: // Move right
+				if (player->Get2DPosition().x > SCREEN_WIDTH - player->GetWidth())
+				{
+					player->Set2DPosition(SCREEN_WIDTH - player->GetWidth(), player->Get2DPosition().y);
+				}
+				else {
+					playerDirection = 1;
+					it->MoveRight(deltaTime);
+				}
+				break;
+			case 8: // Move up
+				if (player->Get2DPosition().y < 0) {
+					player->Set2DPosition(player->Get2DPosition().x, 0);
+				}
+				else
+					it->MoveUp(deltaTime);
+				break;
+			default:
+				break;
+			}
+			it->Update(deltaTime);
+
+		}
+		//time1 += deltaTime;
+		//Update Enemy
+		for (auto& it : m_listEnemies) {
+			GSPlay::EnemyAutoMove(it);
+			// Collision with Bullet
+			if (it->GetEnemyLive()) { // if enemy is alive
+				for (auto& bul : m_listBullets)
+				{
+					if (bul->GetBulletActive()) // if bullet is flying
+					{
+						if (intersect(bul->Get2DPosition().x, bul->Get2DPosition().y, bul->GetWidth(), bul->GetHeight(),
+							it->Get2DPosition().x, it->Get2DPosition().y, it->GetWidth(), it->GetHeight()))
+						{	//check VAR
+
+							bul->SetBulletActive(false);
+							it->SetEnemyAlive(false);
+							scores += 5;
+							score->LoadFromRenderText(std::to_string(scores));
+
+						}
 					}
 				}
-			}
-			if (intersect(player->Get2DPosition().x + 18, player->Get2DPosition().y + 17, player->GetWidth() - 36, player->GetHeight() - 37,
-				it->Get2DPosition().x + 11, it->Get2DPosition().y + 10, it->GetWidth() - 22, it->GetHeight() - 20)) {
+				if (intersect(player->Get2DPosition().x + 18, player->Get2DPosition().y + 17, player->GetWidth() - 36, player->GetHeight() - 37,
+					it->Get2DPosition().x + 11, it->Get2DPosition().y + 10, it->GetWidth() - 22, it->GetHeight() - 20)) {
 
-				if (!isInvulnerable) {
-					// Reduce character's health here
-					playerHealth--;
-					// Set the character to be invulnerable
-					isInvulnerable = true;
-					printf("Waitting......");
-					// Set a timer for the invulnerability cooldown period 
+					if (!isInvulnerable) {
+						// Reduce character's health here
+						playerHealth--;
+						// Set the character to be invulnerable
+						isInvulnerable = true;
+						printf("Waitting......");
+						// Set a timer for the invulnerability cooldown period 
 
-					int invulnerabilityCooldown = 3000; // Change this value to suit your needs
-					SDL_AddTimer(invulnerabilityCooldown, resetInvulnerability, NULL);
+						int invulnerabilityCooldown = 3000; // Change this value to suit your needs
+						SDL_AddTimer(invulnerabilityCooldown, resetInvulnerability, NULL);
 
-					// Set up a timer for toggling sprite visibility 
-					int flashingInterval = 200; // Adjust this value to control the flashing speed
-					SDL_AddTimer(flashingInterval, toggleSpriteVisibility, NULL);
+						// Set up a timer for toggling sprite visibility 
+						int flashingInterval = 200; // Adjust this value to control the flashing speed
+						SDL_AddTimer(flashingInterval, toggleSpriteVisibility, NULL);
 
-					hasCollided = true;
+						hasCollided = true;
+					}
+
 				}
-
 			}
-		}
-		
-		it->Update(deltaTime);
-	}
-	//Update Bullet
-	for (auto& it : m_listBullets)
-	{
-		//shoot
-		if (it->GetBulletActive())
-		{
-			float x = it->Get2DPosition().x;
-			float y = it->Get2DPosition().y;
-			float r = it->GetRotation();
-			// shooting
-			x += m_bullet_speed * cos(r * M_PI / 180);
-			y += m_bullet_speed * sin(r * M_PI / 180);
 
-			it->Set2DPosition(x, y);
-			// Collision with screen
-			if (x < 0 || x > SCREEN_WIDTH || y < 0 || y > SCREEN_HEIGHT)
+			it->Update(deltaTime);
+		}
+		//Update Bullet
+		for (auto& it : m_listBullets)
+		{
+			//shoot
+			if (it->GetBulletActive())
 			{
-				it->SetBulletActive(false);
+				float x = it->Get2DPosition().x;
+				float y = it->Get2DPosition().y;
+				float r = it->GetRotation();
+				// shooting
+				x += m_bullet_speed * cos(r * M_PI / 180);
+				y += m_bullet_speed * sin(r * M_PI / 180);
+
+				it->Set2DPosition(x, y);
+				// Collision with screen
+				if (x < 0 || x > SCREEN_WIDTH || y < 0 || y > SCREEN_HEIGHT)
+				{
+					it->SetBulletActive(false);
+				}
 			}
-		}
-		it->Update(deltaTime);
-	}
-
-	// Spaw Enemies
-
-	time1 += deltaTime;
-	
-	if (time1 >= 1.5f)
-	{
-		//Spawn
-		for (int i = 0; i < MAX_ENEMIES; ++i) {
-
-			auto texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
-			enemy = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
-			enemy->SetFlip(SDL_FLIP_NONE);
-			enemy->SetSize(40, 50);
-			enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT);
-			enemy->SetEnemyAlive(true);
-			m_listEnemies.push_back(enemy);
+			it->Update(deltaTime);
 		}
 
-		time1 = 0.0f;
-	}
+		// Spaw Enemies
 
-	/*GSPlay::UpdateValue(golds, gold_cnt);
-	GSPlay::UpdateValue(scores, score_cnt);
-	gold->Update(deltaTime);
-	score->Update(deltaTime);*/
+		time1 += deltaTime;
 
-	currentTime = SDL_GetTicks();
-	elapsedTime = currentTime - startTime;
-
-	if (elapsedTime >= 1000)
-	{
-		if (countdown <= 1)
+		if (time1 >= 1.5f)
 		{
-			countdown = 1;
+			//Spawn
+			for (int i = 0; i < MAX_ENEMIES; ++i) {
+
+				auto texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
+				enemy = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
+				enemy->SetFlip(SDL_FLIP_NONE);
+				enemy->SetSize(40, 50);
+				enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT);
+				enemy->SetEnemyAlive(true);
+				m_listEnemies.push_back(enemy);
+			}
+
+			time1 = 0.0f;
 		}
-		countdown--;
-		startTime = currentTime;
+
+		/*GSPlay::UpdateValue(golds, gold_cnt);
+		GSPlay::UpdateValue(scores, score_cnt);
+		gold->Update(deltaTime);
+		score->Update(deltaTime);*/
+
+		currentTime = SDL_GetTicks();
+		elapsedTime = currentTime - startTime;
+
+		if (elapsedTime >= 1000)
+		{
+			if (countdown <= 1)
+			{
+				countdown = 1;
+			}
+			countdown--;
+			startTime = currentTime;
+		}
+
+		int minutes = countdown / 60;
+		int seconds = countdown % 60;
+
+
+		min = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
+		//TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
+		min->SetSize(50, 50);
+		min->Set2DPosition(500, 30);
+		min->LoadFromRenderText(std::to_string(minutes) + ": ");
+
+		sec = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
+		//TTF_SizeText(100, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
+		sec->SetSize(50, 50);
+		sec->Set2DPosition(550, 30);
+		sec->LoadFromRenderText(std::to_string(seconds));
 	}
-
-	int minutes = countdown / 60;
-	int seconds = countdown % 60;
-
-
-	min = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
-	//TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
-	min->SetSize(50, 50);
-	min->Set2DPosition(500, 30);
-	min->LoadFromRenderText(std::to_string(minutes) + ": ");
-
-	sec = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
-	//TTF_SizeText(100, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
-	sec->SetSize(50, 50);
-	sec->Set2DPosition(550, 30);
-	sec->LoadFromRenderText(std::to_string(seconds));
-      
-
        
+	if (playerHealth < 1) {
+		isGameOver = true;
+	}
 
 }
 
@@ -551,9 +558,6 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 		m_heartIcons[2]->Draw(renderer);
 	}
 
-	/*if (playerHealth < 1) {
-		m_endGameButton->Draw(renderer);
-	}*/
 	//Render Button
 	for (auto it : m_listButton)
 	{
@@ -586,6 +590,11 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	{
 		if (it->GetBulletActive())
 			it->Draw(renderer);
+	}
+
+	//Show game over
+	if (playerHealth < 1) {
+		m_endGameButton->Draw(renderer);
 	}
 
 }

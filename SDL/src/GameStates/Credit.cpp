@@ -36,7 +36,7 @@ void Credit::Init() {
 	//load credit game
 	cre_text_color = { 0, 0, 0 };
 	credit_text = std::make_shared<Text>("Data/font2.ttf", cre_text_color, 20);
-	credit_text->SetSize(300, 50);
+	credit_text->SetSize(550, 80);
 	credit_text->Set2DPosition((SCREEN_WIDTH - credit_text->GetWidth()) / 2, SCREEN_HEIGHT / 2 - 200);
 	credit_text->LoadFromRenderText("Game stolen by our group, let's find Survivo.io! Thanks you");
 	
