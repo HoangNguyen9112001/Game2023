@@ -85,8 +85,11 @@ private:
 	std::shared_ptr<SpriteAnimation>			enemy;
 
 	std::shared_ptr<MouseButton>				button;
-
+	
+	std::shared_ptr<Sprite2D>	m_victoryIcon;
+	std::shared_ptr<MouseButton> m_nextButton;
 	std::shared_ptr<MouseButton> m_endGameButton;
+
 
 	float time = 0.0f;
 	float m_Velocity = 10.0f;

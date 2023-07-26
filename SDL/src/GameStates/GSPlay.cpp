@@ -95,9 +95,22 @@ void GSPlay::Init()
 		});
 	m_listButton.push_back(button);
 
+	//Victory
+	auto textureVictory = ResourceManagers::GetInstance()->GetTexture("victory3.png");
+	m_victoryIcon = std::make_shared<Sprite2D>(textureVictory, SDL_FLIP_NONE);
+	m_victoryIcon->Set2DPosition(SCREEN_WIDTH/2 - 350, SCREEN_HEIGHT/2 -300 );
+	m_victoryIcon->SetSize(700, 600);
+	auto textureVictoryButton = ResourceManagers::GetInstance()->GetTexture("button/032.png");
+	m_nextButton = std::make_shared<MouseButton>(textureVictoryButton, SDL_FLIP_NONE);
+	m_nextButton->Set2DPosition(SCREEN_WIDTH / 2 - 25, SCREEN_HEIGHT / 2 + 50);
+	m_nextButton->SetSize(50, 50);
+	m_nextButton->SetOnClick([this]() {
+		isGameOver = false;
+		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
+		});
 	//End game
-	auto texture0 = ResourceManagers::GetInstance()->GetTexture("gameover.png");
-	m_endGameButton = std::make_shared<MouseButton>(texture0, SDL_FLIP_NONE);
+	auto textureEndGame = ResourceManagers::GetInstance()->GetTexture("gameover.png");
+	m_endGameButton = std::make_shared<MouseButton>(textureEndGame, SDL_FLIP_NONE);
 	m_endGameButton->Set2DPosition(SCREEN_WIDTH / 2 - 450, SCREEN_HEIGHT / 2 - 225);
 	m_endGameButton->SetSize(900, 450);
 	m_endGameButton->SetOnClick([this]() {
@@ -128,7 +141,7 @@ void GSPlay::Init()
 	
 	//SCORE
 	m_textColor = { 0, 0, 255 };
-	m_score = std::make_shared<Text>("Data/font2.ttf", m_textColor, 20);
+	m_score = std::make_shared<Text>("Data/calibri.ttf", m_textColor, 20);
 	m_score->SetSize(75, 30);
 	m_score->Set2DPosition((SCREEN_WIDTH - m_score->GetWidth()) / 3, 45);
 	m_score->LoadFromRenderText("Score: ");
@@ -299,6 +312,9 @@ void GSPlay::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 	if (playerHealth < 1) {
 		m_endGameButton->HandleTouchEvent(&e);
 	}
+	if (isGameOver) {
+		m_nextButton->HandleTouchEvent(&e);
+	}
 }
 
 void GSPlay::HandleMouseMoveEvents(int x, int y)
@@ -409,10 +425,8 @@ void GSPlay::Update(float deltaTime)
 						playerHealth--;
 						// Set the character to be invulnerable
 						isInvulnerable = true;
-						printf("Waitting......");
 						// Set a timer for the invulnerability cooldown period 
-
-						int invulnerabilityCooldown = 3000; // Change this value to suit your needs
+						int invulnerabilityCooldown = 3000;
 						SDL_AddTimer(invulnerabilityCooldown, resetInvulnerability, NULL);
 
 						// Set up a timer for toggling sprite visibility 
@@ -493,19 +507,24 @@ void GSPlay::Update(float deltaTime)
 		int seconds = countdown % 60;
 
 
-		min = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
+		min = std::make_shared<Text>("Data/calibrib.ttf", m_textColor, 14);
 		//TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
 		min->SetSize(50, 50);
 		min->Set2DPosition(500, 30);
 		min->LoadFromRenderText(std::to_string(minutes) + ": ");
 
-		sec = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
+		sec = std::make_shared<Text>("Data/calibrib.ttf", m_textColor, 14);
 		//TTF_SizeText(100, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
 		sec->SetSize(50, 50);
 		sec->Set2DPosition(550, 30);
 		sec->LoadFromRenderText(std::to_string(seconds));
+
+		if (minutes<1 && seconds <1) {
+			isGameOver = true;
+		}
+
 	}
-       
+
 	if (playerHealth < 1) {
 		isGameOver = true;
 	}
@@ -596,12 +615,14 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	if (playerHealth < 1) {
 		m_endGameButton->Draw(renderer);
 	}
-
+	if (isGameOver && playerHealth >= 1) {
+		m_victoryIcon->Draw(renderer);
+		m_nextButton->Draw(renderer);
+	}
 }
 
 //Reset invulnerable state
 Uint32 resetInvulnerability(Uint32 interval, void* param) {
-	printf("DONE 3s.................");
 	isInvulnerable = false;
 	hasCollided = false;
 	if (!isInvulnerable) {
