@@ -24,15 +24,15 @@ void GSMenu::Init()
 	m_background->Set2DPosition(0, 0);
 
 	//Sound
-<<<<<<< HEAD
-	auto m_Sound = std::make_shared<Sound>("Data/Sounds/Menu.mp3");
-	m_Sound->PlaySound();
-	m_Sound->LoadSound("Data/Sounds/Menu.mp3");
-=======
+
+	//auto m_Sound = std::make_shared<Sound>("Data/Sounds/Menu.mp3");
+	//m_Sound->PlaySound();
+	//m_Sound->LoadSound("Data/Sounds/Menu.mp3");
+
 	auto m_Sound = std::make_shared<Sound>("Data/Sounds/MainBG.ogg");
 	m_Sound->PlaySound();
 	m_Sound->LoadSound("Data/Sounds/MainBG.ogg");
->>>>>>> 809796954ea1e4a0a4cfebd6ad82740942fac7c1
+
 
 	// play button
 	texture = ResourceManagers::GetInstance()->GetTexture("BTN/Play_BTN.png");
@@ -99,22 +99,20 @@ void GSMenu::Exit()
 
 void GSMenu::Pause()
 {
-<<<<<<< HEAD
+
 	
 	m_Sound->PauseSound();
-=======
+
 	//m_Sound->StopSound();
 
->>>>>>> 809796954ea1e4a0a4cfebd6ad82740942fac7c1
+
 }
 
 void GSMenu::Resume()
 {
-<<<<<<< HEAD
+
 	m_Sound->ResumeSound();
-=======
-	//m_Sound->PlaySound();
->>>>>>> 809796954ea1e4a0a4cfebd6ad82740942fac7c1
+
 }
 
 

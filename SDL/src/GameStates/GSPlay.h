@@ -66,6 +66,7 @@ private:
 	std::shared_ptr<Sprite2D>	bullet;
 
 	std::shared_ptr<Sound> BgSound;
+	std::shared_ptr<Sound> m_Sound1;
 	std::shared_ptr<Sound> Shooting;
 
 	std::shared_ptr<Text>		m_score;

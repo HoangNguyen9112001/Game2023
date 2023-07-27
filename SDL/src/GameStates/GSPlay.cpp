@@ -5,6 +5,8 @@
 #include "GameObject/SpriteAnimation.h"
 #include "GameObject/Camera.h"
 #include "GSMenu.h"
+#include "SDL.h";
+#include "SDL_mixer.h"
 
 
 // tính khoảng cách giữa hai điểm
@@ -109,7 +111,8 @@ void GSPlay::Init()
 	m_nextButton->SetSize(50, 50);
 	m_nextButton->SetOnClick([this]() {
 		isGameOver = false;
-		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
+		Exit();
+		//GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
 		});
 	//End game
 	auto textureEndGame = ResourceManagers::GetInstance()->GetTexture("gameover.png");
@@ -199,20 +202,31 @@ void GSPlay::Init()
 	//Camera::GetInstance()->SetTarget(obj);
 	
 
-<<<<<<< HEAD
+
 	// Sound
-	auto BgSound = std::make_shared<Sound>("Data/Sounds/BgSoundPlay.mp3");
+	BgSound = std::make_shared<Sound>("Data/Sounds/BgSoundPlay.mp3");
 	BgSound->PlaySound();
 	BgSound->LoadSound("Data/Sounds/BgSoundPlay.mp3");
-		
-=======
+	
+	
 
-	//Sound
-	auto m_Sound1 = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
+	/*auto Shooting = std::make_shared<Sound>("Data/Sounds/Shooting.mp3");
+	Shooting->LoadSound("Data/Sounds/Shooting.mp3");
+	Shooting->PlaySound();*/
+
+
+	////Sound
+	/*m_Sound1 = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
 	m_Sound1->PlaySound();
-	m_Sound1->LoadSound("Data/Sounds/Alarm01.wav");
+	m_Sound1->LoadSound("Data/Sounds/Alarm01.wav");*/
 
->>>>>>> 809796954ea1e4a0a4cfebd6ad82740942fac7c1
+
+	
+	//Mix_Chunk* explosionSound = Mix_LoadWAV("Data/Sounds/Alarm01.wav");
+
+	//Mix_PlayChannel(-1, gunshotSound, 0);
+	//Mix_PlayChannel(-1, explosionSound, 0);
+
 	m_KeyPress = 0;
 }
 
@@ -238,8 +252,11 @@ void GSPlay::HandleEvents()
 	
 }
 
+
+
 void GSPlay::HandleKeyEvents(SDL_Event& e)
 {
+	
 	switch (e.type) {
 		//If a key was pressed
 	case SDL_KEYDOWN:
@@ -299,11 +316,14 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 	case SDL_MOUSEBUTTONDOWN:
 		if (e.button.button == SDL_BUTTON_LEFT)
 		{
-			auto shooting = std::make_shared<Sound>("Data/Sounds/Shooting.mp3");
-			shooting->LoadSound("Data/Sounds/Shooting.mp3");
-			shooting->PlaySound();
+			Mix_Chunk* gunshotSound = Mix_LoadWAV("Data/Sounds/Shooting.mp3");
+			Mix_PlayChannel(-1, gunshotSound, 0);
+			/*auto Shooting = std::make_shared<Sound>("Data/Sounds/Shooting.mp3");
+			Shooting->LoadSound("Data/Sounds/Shooting.mp3");
+			Shooting->PlaySound();*/
 			for (auto& it : m_listBullets)
 			{
+				
 				int curentTime = SDL_GetTicks();
 				//create bullet
 				if (!it->GetBulletActive())//if no bullet active
@@ -311,11 +331,13 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 					//Pause();
 					
 					if (curentTime - m_lastShootTime > m_shootDelay) {
+
 						it->Set2DPosition(weapon->Get2DPosition().x  + weapon->GetWidth() / 2,
 							weapon->Get2DPosition().y + weapon->GetHeight() / 2);
 						it->SetRotation(weaponAngle);
 						it->SetBulletActive(true);
 						m_lastShootTime = curentTime;
+						//Shooting->StopSound();
 					}
 				}
 			}
@@ -355,6 +377,7 @@ void GSPlay::Update(float deltaTime)
 		default:
 			break;
 		}
+		
 		//Update Button
 		for (auto& it : m_listButton)
 		{
