@@ -24,12 +24,18 @@ void GSMenu::Init()
 	m_background->Set2DPosition(0, 0);
 
 	//Sound
+<<<<<<< HEAD
 	auto m_Sound = std::make_shared<Sound>("Data/Sounds/Menu.mp3");
 	m_Sound->PlaySound();
 	m_Sound->LoadSound("Data/Sounds/Menu.mp3");
+=======
+	auto m_Sound = std::make_shared<Sound>("Data/Sounds/MainBG.ogg");
+	m_Sound->PlaySound();
+	m_Sound->LoadSound("Data/Sounds/MainBG.ogg");
+>>>>>>> 809796954ea1e4a0a4cfebd6ad82740942fac7c1
 
 	// play button
-	texture = ResourceManagers::GetInstance()->GetTexture("button/001.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("BTN/Play_BTN.png");
 	std::shared_ptr<MouseButton> btnPlay = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	btnPlay->SetSize(150, 150);
 	btnPlay->Set2DPosition((SCREEN_WIDTH - btnPlay->GetWidth())/2, (SCREEN_HEIGHT - btnPlay->GetHeight()) / 2);
@@ -43,7 +49,7 @@ void GSMenu::Init()
 	m_listButton.push_back(btnPlay);
 
 	// exit button
-	texture = ResourceManagers::GetInstance()->GetTexture("button/031.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("BTN/Close_BTN.png");
 	std::shared_ptr<MouseButton> btnClose = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	//btnClose = std::make_shared<MouseButton>(texture);
 	btnClose->SetSize(50, 50);
@@ -54,7 +60,7 @@ void GSMenu::Init()
 	m_listButton.push_back(btnClose);
 
 	//Setting game
-	texture = ResourceManagers::GetInstance()->GetTexture("button/009.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("BTN/Rating_BTN.png");
 	std::shared_ptr<MouseButton> btnOption = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	btnOption->SetSize(100, 100);
 	btnOption->Set2DPosition((SCREEN_WIDTH - btnOption->GetWidth()) / 2, SCREEN_HEIGHT / 2 + 170);
@@ -64,7 +70,7 @@ void GSMenu::Init()
 	m_listButton.push_back(btnOption);
 
 	//CREDIT game
-	texture = ResourceManagers::GetInstance()->GetTexture("button/011.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("BTN/FAQ_BTN.png");
 	btnCredit = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	btnCredit->Set2DPosition((SCREEN_WIDTH - btnCredit->GetWidth()) / 2, SCREEN_HEIGHT / 2 + 280);
 	btnCredit->SetSize(100, 100);
@@ -93,13 +99,22 @@ void GSMenu::Exit()
 
 void GSMenu::Pause()
 {
+<<<<<<< HEAD
 	
 	m_Sound->PauseSound();
+=======
+	//m_Sound->StopSound();
+
+>>>>>>> 809796954ea1e4a0a4cfebd6ad82740942fac7c1
 }
 
 void GSMenu::Resume()
 {
+<<<<<<< HEAD
 	m_Sound->ResumeSound();
+=======
+	//m_Sound->PlaySound();
+>>>>>>> 809796954ea1e4a0a4cfebd6ad82740942fac7c1
 }
 
 

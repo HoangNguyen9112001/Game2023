@@ -31,4 +31,5 @@ private:
 	std::shared_ptr<Sprite2D>				opt_bg, m_high_score;
 	std::shared_ptr<MouseButton>			button;
 	std::shared_ptr<Text>					best_score;
+	int HighScore;
 };

@@ -28,9 +28,9 @@ void GSPause::Init()
 	m_boder->SetSize(800, 300);
 	m_boder->Set2DPosition((SCREEN_WIDTH - m_boder->GetWidth()) / 2, (SCREEN_HEIGHT - m_boder->GetHeight()) / 2);
 
-	//continue
+	//Back
 	std::shared_ptr<MouseButton> button = std::make_shared<MouseButton>(ResourceManagers::
-		GetInstance()->GetTexture("button/032.png"), SDL_FLIP_HORIZONTAL);
+		GetInstance()->GetTexture("BTN/Backward_BTN.png"), SDL_FLIP_HORIZONTAL);
 	button->SetSize(70, 70);
 	button->Set2DPosition(m_boder->Get2DPosition().x + 190, m_boder->Get2DPosition().y + 120);
 	button->SetOnClick([this]() {
@@ -39,7 +39,7 @@ void GSPause::Init()
 	m_listButton.push_back(button);
 
 	//Sound control
-	m_soundButtonPlay = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_music.tga"), SDL_FLIP_NONE);
+	m_soundButtonPlay = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("BTNActive/Music_BTN.png"), SDL_FLIP_NONE);
 	m_soundButtonPlay->SetSize(70, 70);
 	m_soundButtonPlay->Set2DPosition(m_boder->Get2DPosition().x + 565, m_boder->Get2DPosition().y + 120);
 
@@ -49,7 +49,7 @@ void GSPause::Init()
 		});
 
 	m_listButton.push_back(m_soundButtonPlay);
-	m_soundButtonOff = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_music_off.tga"), SDL_FLIP_NONE);
+	m_soundButtonOff = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("BTN/Music_BTN.png"), SDL_FLIP_NONE);
 	m_soundButtonOff->SetSize(70, 70);
 	m_soundButtonOff->Set2DPosition(m_boder->Get2DPosition().x + 565, m_boder->Get2DPosition().y + 120);
 
@@ -60,7 +60,7 @@ void GSPause::Init()
 	m_listButton.push_back(m_soundButtonOff);
 
 	//Restart
-	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("btn_restart.tga"), SDL_FLIP_NONE);
+	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("BTN/Replay_BTN.png"), SDL_FLIP_NONE);
 	button->SetSize(70, 70);
 	button->Set2DPosition(m_boder->Get2DPosition().x + 375, m_boder->Get2DPosition().y + 120);
 	button->SetOnClick([this]() {
@@ -71,7 +71,7 @@ void GSPause::Init()
 
 	//title
 	color = { 255, 255, 204 };
-	m_textGameSetting = std::make_shared<Text>("Data/font2.ttf", color, 28);
+	m_textGameSetting = std::make_shared<Text>("Data/MochiyPopOne.ttf", color, 28);
 	m_textGameSetting->SetSize(300, 70);
 	m_textGameSetting->Set2DPosition((SCREEN_WIDTH - m_textGameSetting->GetWidth()) / 2, m_boder->Get2DPosition().y - 100);
 	m_textGameSetting->LoadFromRenderText("Pause");

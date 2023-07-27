@@ -14,7 +14,7 @@ Credit::~Credit()
 }
 
 void Credit::Init() {
-	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_menu.tga");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("brick-bgr-credit.png");
 
 	// background
 
@@ -23,10 +23,10 @@ void Credit::Init() {
 	cre_background->Set2DPosition(0, 0);
 
 	// button close
-	texture = ResourceManagers::GetInstance()->GetTexture("btn_close.tga");
+	texture = ResourceManagers::GetInstance()->GetTexture("BTN/Backward_BTN.png");
 	button = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	button->SetSize(50, 50);
-	button->Set2DPosition(SCREEN_WIDTH - 50, 10);
+	button->Set2DPosition(50, 10);
 	button->SetOnClick([this]() {
 		GameStateMachine::GetInstance()->PopState();
 		});
@@ -34,11 +34,11 @@ void Credit::Init() {
 
 
 	//load credit game
-	cre_text_color = { 0, 0, 0 };
+	cre_text_color = { 255, 255, 204 };
 	credit_text = std::make_shared<Text>("Data/font2.ttf", cre_text_color, 20);
 	credit_text->SetSize(550, 80);
-	credit_text->Set2DPosition((SCREEN_WIDTH - credit_text->GetWidth()) / 2, SCREEN_HEIGHT / 2 - 200);
-	credit_text->LoadFromRenderText("Game stolen by our group, let's find Survivo.io! Thanks you");
+	credit_text->Set2DPosition((SCREEN_WIDTH - credit_text->GetWidth()) / 2, SCREEN_HEIGHT / 2 - 300);
+	credit_text->LoadFromRenderText("Game stolen by our group!");
 	
 }
 void Credit::Exit()

@@ -36,7 +36,7 @@ void GSPickPlayer::Init()
 		});
 	m_listButtons.push_back(border2);
 	//player1
-	player1 = std::make_shared<SpriteAnimation>(ResourceManagers::GetInstance()->GetTexture("player.png"), 1, 24, 8, 0.2f);
+	player1 = std::make_shared<SpriteAnimation>(ResourceManagers::GetInstance()->GetTexture("Asset/Player.tga"), 1, 3, 1, 0.7f);
 	player1->SetFlip(SDL_FLIP_NONE);
 	player1->SetSize(120, 160);
 	player1->Set2DPosition(border1->Get2DPosition().x + (border1->GetWidth() - player1->GetWidth()) / 2,
@@ -49,9 +49,9 @@ void GSPickPlayer::Init()
 							border2->Get2DPosition().y + (border2->GetHeight() - player2->GetHeight()) / 2);
 	//back to menu
 	std::shared_ptr<MouseButton> button = std::make_shared<MouseButton>(ResourceManagers::
-											GetInstance()->GetTexture("button/006.png"), SDL_FLIP_NONE);
+											GetInstance()->GetTexture("BTN/Backward_BTN.png"), SDL_FLIP_NONE);
 	button->SetSize(70, 70);
-	button->Set2DPosition(75, 20);
+	button->Set2DPosition(0, 5);
 	button->SetOnClick([this]() {
 		GameStateMachine::GetInstance()->PopState();
 		});
