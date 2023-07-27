@@ -75,7 +75,7 @@ void GSPlay::Init()
 	m_heartIcons.push_back(m_heartIcon);
 
 	// Close button
-	texture = ResourceManagers::GetInstance()->GetTexture("button/031.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("BTN/Close_BTN.png");
 	button = std::make_shared<MouseButton>( texture, SDL_FLIP_NONE);
 	button->SetSize(60, 60);
 	button->Set2DPosition(SCREEN_WIDTH - 75, 20);
@@ -87,7 +87,7 @@ void GSPlay::Init()
 
 
 	// Pause button
-	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("button/017.png"), SDL_FLIP_NONE);
+	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("BTN/Pause_BTN.png"), SDL_FLIP_NONE);
 	button->SetSize(60, 60);
 	button->Set2DPosition(SCREEN_WIDTH - 150, 20);
 	button->SetOnClick([this]() {
@@ -101,7 +101,7 @@ void GSPlay::Init()
 	m_victoryIcon->Set2DPosition(SCREEN_WIDTH/2 - 350, SCREEN_HEIGHT/2 -300 );
 	m_victoryIcon->SetSize(700, 600);
 
-	auto textureVictoryButton = ResourceManagers::GetInstance()->GetTexture("button/032.png");
+	auto textureVictoryButton = ResourceManagers::GetInstance()->GetTexture("BTN/Forward_BTN.png");
 	m_nextButton = std::make_shared<MouseButton>(textureVictoryButton, SDL_FLIP_NONE);
 	m_nextButton->Set2DPosition(SCREEN_WIDTH / 2 - 25, SCREEN_HEIGHT / 2 + 50);
 	m_nextButton->SetSize(50, 50);
@@ -122,10 +122,10 @@ void GSPlay::Init()
    // Pick Player
 	//Player1
 	if (i == 0) {
-		texture = ResourceManagers::GetInstance()->GetTexture("player.png");
-		player = std::make_shared<SpriteAnimation>(texture, 1, 24, 8, 0.2f);
+		texture = ResourceManagers::GetInstance()->GetTexture("Asset/Player.tga");
+		player = std::make_shared<SpriteAnimation>(texture, 1, 3, 1, 0.2f);
 		player->SetFlip(SDL_FLIP_HORIZONTAL);
-		player->SetSize(60, 80);
+		player->SetSize(40, 50);
 		player->Set2DPosition(350, 400);
 		m_listAnimation.push_back(player);
 	}
@@ -184,8 +184,8 @@ void GSPlay::Init()
 	//Enemies
 	for (int i = 0; i < MAX_ENEMIES; ++i) {
 
-		texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
-		enemy = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
+		texture = ResourceManagers::GetInstance()->GetTexture("Asset/ZombieSprite.tga");
+		enemy = std::make_shared<SpriteAnimation>(texture, 1, 3, 1, 0.9f);
 		enemy->SetFlip(SDL_FLIP_NONE);
 		enemy->SetSize(40, 50);
 		enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT);
@@ -196,10 +196,11 @@ void GSPlay::Init()
 	//Camera::GetInstance()->SetTarget(obj);
 	
 
-	// Sound
-	auto BgSound = std::make_shared<Sound>("Data/Sounds/BgSoundPlay.mp3");
-	BgSound->PlaySound();
-	BgSound->LoadSound("Data/Sounds/BgSoundPlay.mp3");
+
+	//Sound
+	auto m_Sound1 = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
+	m_Sound1->PlaySound();
+	m_Sound1->LoadSound("Data/Sounds/Alarm01.wav");
 
 	m_KeyPress = 0;
 }
@@ -345,7 +346,7 @@ void GSPlay::Update(float deltaTime)
 		for (auto& it : m_listAnimation)
 		{
 			// Gun rotation
-			weapon = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("weaponR1.png"),
+			weapon = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("Asset/gun.png"),
 				playerDirection == 1 ? SDL_FLIP_NONE : SDL_FLIP_VERTICAL);
 			weapon->SetRotation(weaponAngle);
 			weapon->SetSize(50, 20);
@@ -366,6 +367,7 @@ void GSPlay::Update(float deltaTime)
 					player->Set2DPosition(50, player->Get2DPosition().y);
 				}
 				else {
+					player->SetFlip(SDL_FLIP_HORIZONTAL);
 					playerDirection = -1;
 					it->MoveLeft(deltaTime);
 				}
@@ -383,6 +385,7 @@ void GSPlay::Update(float deltaTime)
 					player->Set2DPosition(SCREEN_WIDTH - player->GetWidth() -50, player->Get2DPosition().y);
 				}
 				else {
+					player->SetFlip(SDL_FLIP_NONE);
 					playerDirection = 1;
 					it->MoveRight(deltaTime);
 				}
@@ -426,7 +429,7 @@ void GSPlay::Update(float deltaTime)
 				}
 
 				//enemy VAR player
-				if (intersect(player->Get2DPosition().x + 18, player->Get2DPosition().y + 17, player->GetWidth() - 36, player->GetHeight() - 37,
+				if (intersect(player->Get2DPosition().x + 5, player->Get2DPosition().y , player->GetWidth() -10, player->GetHeight(),
 					it->Get2DPosition().x + 11, it->Get2DPosition().y + 10, it->GetWidth() - 22, it->GetHeight() - 20)) {
 
 					if (!isInvulnerable) { //nếu player không trong trạng thái không thể bị chỉ định 
@@ -445,6 +448,12 @@ void GSPlay::Update(float deltaTime)
 						hasCollided = true;
 					}
 
+				}
+				if ((player->Get2DPosition().x) <= (it->Get2DPosition().x)) {
+					it->SetFlip(SDL_FLIP_HORIZONTAL);
+				}
+				else if ((player->Get2DPosition().x) > (it->Get2DPosition().x)) {
+					it->SetFlip(SDL_FLIP_NONE);
 				}
 			}
 			it->Update(deltaTime);
@@ -481,8 +490,8 @@ void GSPlay::Update(float deltaTime)
 		{
 			for (int i = 0; i < MAX_ENEMIES; ++i) {
 
-				auto texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
-				enemy = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
+				auto texture = ResourceManagers::GetInstance()->GetTexture("Asset/ZombieSprite.tga");
+				enemy = std::make_shared<SpriteAnimation>(texture, 1, 3, 1, 0.9f);
 				enemy->SetFlip(SDL_FLIP_NONE);
 				enemy->SetSize(40, 50);
 				enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT);

@@ -24,12 +24,12 @@ void GSMenu::Init()
 	m_background->Set2DPosition(0, 0);
 
 	//Sound
-	auto m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
+	auto m_Sound = std::make_shared<Sound>("Data/Sounds/MainBG.ogg");
 	m_Sound->PlaySound();
-	m_Sound->LoadSound("Data/Sounds/Alarm01.wav");
+	m_Sound->LoadSound("Data/Sounds/MainBG.ogg");
 
 	// play button
-	texture = ResourceManagers::GetInstance()->GetTexture("button/001.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("BTN/Play_BTN.png");
 	std::shared_ptr<MouseButton> btnPlay = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	
 	btnPlay->SetSize(150, 150);
@@ -44,7 +44,7 @@ void GSMenu::Init()
 	m_listButton.push_back(btnPlay);
 
 	// exit button
-	texture = ResourceManagers::GetInstance()->GetTexture("button/031.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("BTN/Close_BTN.png");
 	std::shared_ptr<MouseButton> btnClose = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	//btnClose = std::make_shared<MouseButton>(texture);
 	btnClose->SetSize(50, 50);
@@ -55,7 +55,7 @@ void GSMenu::Init()
 	m_listButton.push_back(btnClose);
 
 	//Setting game
-	texture = ResourceManagers::GetInstance()->GetTexture("button/009.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("BTN/Rating_BTN.png");
 	std::shared_ptr<MouseButton> btnOption = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	btnOption->SetSize(100, 100);
 	btnOption->Set2DPosition((SCREEN_WIDTH - btnOption->GetWidth()) / 2, SCREEN_HEIGHT / 2 + 170);
@@ -65,7 +65,7 @@ void GSMenu::Init()
 	m_listButton.push_back(btnOption);
 
 	//CREDIT game
-	texture = ResourceManagers::GetInstance()->GetTexture("button/011.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("BTN/FAQ_BTN.png");
 	btnCredit = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	btnCredit->Set2DPosition((SCREEN_WIDTH - btnCredit->GetWidth()) / 2, SCREEN_HEIGHT / 2 + 280);
 	btnCredit->SetSize(100, 100);

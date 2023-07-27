@@ -23,7 +23,7 @@ void Credit::Init() {
 	cre_background->Set2DPosition(0, 0);
 
 	// button close
-	texture = ResourceManagers::GetInstance()->GetTexture("Button/032.png");
+	texture = ResourceManagers::GetInstance()->GetTexture("BTN/Backward_BTN.png");
 	button = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
 	button->SetSize(50, 50);
 	button->Set2DPosition(50, 10);
