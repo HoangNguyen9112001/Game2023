@@ -92,13 +92,13 @@ void GSMenu::Exit()
 
 void GSMenu::Pause()
 {
-	m_Sound->StopSound();
+	//m_Sound->StopSound();
 
 }
 
 void GSMenu::Resume()
 {
-	m_Sound->PlaySound();
+	//m_Sound->PlaySound();
 }
 
 

@@ -30,7 +30,7 @@ public:
 	void	drawEnemyRect(SDL_Renderer* renderer);
 	void	Draw(SDL_Renderer* renderer) override;
 	void	EnemyAutoMove(std::shared_ptr<SpriteAnimation> obj);
-	
+	void    WriteHighScore();
 	int		GetHighScore();
 	int		bestScore = 0;
 	//int		SetHighScore(int sc);

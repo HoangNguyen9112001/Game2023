@@ -33,14 +33,23 @@ void GSOption::Init()
 	m_high_score = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("high_score.jpg"), SDL_FLIP_NONE);
 	m_high_score->Set2DPosition(0, 0);
 	m_high_score->SetSize(SCREEN_WIDTH, 300);
-
+	// Reading file HighScore.txt
+	// 
+	FILE* file = fopen("Data/HighScore.txt", "r");
+	if (file == nullptr)
+	{
+		return;
+	}
+	fscanf(file, "%d",&HighScore);
+	
 	//Best score
 	SDL_Color m_textColor = { 255, 255, 204 };
 	std::shared_ptr<GSPlay> score = std::make_shared<GSPlay>();
 	best_score = std::make_shared<Text>("Data/calibri.ttf", m_textColor, 20);
 	best_score->SetSize(70, 140);
 	best_score->Set2DPosition(SCREEN_WIDTH / 2 - best_score->GetWidth() / 2,350);
-	best_score->LoadFromRenderText(std::to_string(score->GetHighScore()));
+	best_score->LoadFromRenderText(std::to_string(HighScore));
+	fclose(file);
 
 }
 void	GSOption::Exit()
@@ -71,6 +80,7 @@ void	GSOption::HandleMouseMoveEvents(int x, int y)
 void	GSOption::Update(float deltaTime) 
 {
 	//best_score->Update(deltaTime);
+
 }
 void	GSOption::Draw(SDL_Renderer* renderer) 
 {

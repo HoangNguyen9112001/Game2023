@@ -416,8 +416,11 @@ void GSPlay::Update(float deltaTime)
 
 							bul->SetBulletActive(false);
 							it->SetEnemyAlive(false);
+							//update scores
 							scores += 5;
 							score->LoadFromRenderText(std::to_string(scores));
+							if (scores > bestScore) 
+								bestScore = scores;
 						}
 					}
 				}
@@ -526,6 +529,9 @@ void GSPlay::Update(float deltaTime)
 	}
 
 	if (playerHealth < 1) {
+		if (scores > bestScore)
+			bestScore = scores;
+		WriteHighScore();
 		isGameOver = true;
 	}
 
@@ -674,8 +680,20 @@ void GSPlay::EnemyAutoMove(std::shared_ptr<SpriteAnimation> e)
 	
 }
 
+void GSPlay::WriteHighScore()
+{
+	FILE* file = fopen("Data/HighScore.txt","w");
+	if (file == nullptr)
+	{
+		return;
+	}
+	fprintf(file, "%d",bestScore);
+	fclose(file);
+}
+
 int GSPlay::GetHighScore()
 {
+	if(scores > bestScore) return scores;
 	return bestScore;
 }
 
