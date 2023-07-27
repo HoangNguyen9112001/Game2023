@@ -38,7 +38,7 @@ void Credit::Init() {
 	credit_text = std::make_shared<Text>("Data/font2.ttf", cre_text_color, 20);
 	credit_text->SetSize(550, 80);
 	credit_text->Set2DPosition((SCREEN_WIDTH - credit_text->GetWidth()) / 2, SCREEN_HEIGHT / 2 - 300);
-	credit_text->LoadFromRenderText("Game stolen by our group!");
+	credit_text->LoadFromRenderText("Game made by our group!");
 	
 }
 void Credit::Exit()
