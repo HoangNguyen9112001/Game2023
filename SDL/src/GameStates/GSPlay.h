@@ -43,7 +43,7 @@ public:
 
 	Uint32 startTime = SDL_GetTicks();
 	Uint32 currentTime, elapsedTime;
-	int countdown = 1 * 60;
+	int countdown = 0.25 * 60;
 
 	int m_bullet_speed = 20;
 	int m_MouseMotion;
@@ -66,6 +66,7 @@ private:
 	std::shared_ptr<Sprite2D>	bullet;
 
 	std::shared_ptr<Sound> BgSound;
+	std::shared_ptr<Sound> Shooting;
 
 	std::shared_ptr<Text>		m_score;
 	std::shared_ptr<Text>		score;

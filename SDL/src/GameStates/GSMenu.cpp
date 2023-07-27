@@ -24,22 +24,21 @@ void GSMenu::Init()
 	m_background->Set2DPosition(0, 0);
 
 	//Sound
-	auto m_Sound = std::make_shared<Sound>("Data/Sounds/Alarm01.wav");
+	auto m_Sound = std::make_shared<Sound>("Data/Sounds/Menu.mp3");
 	m_Sound->PlaySound();
-	m_Sound->LoadSound("Data/Sounds/Alarm01.wav");
+	m_Sound->LoadSound("Data/Sounds/Menu.mp3");
 
 	// play button
 	texture = ResourceManagers::GetInstance()->GetTexture("button/001.png");
 	std::shared_ptr<MouseButton> btnPlay = std::make_shared<MouseButton>(texture, SDL_FLIP_NONE);
-	
 	btnPlay->SetSize(150, 150);
 	btnPlay->Set2DPosition((SCREEN_WIDTH - btnPlay->GetWidth())/2, (SCREEN_HEIGHT - btnPlay->GetHeight()) / 2);
-	btnPlay->SetOnClick([]() {
-		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PICKPLAYER);
+	btnPlay->SetOnClick([this]() {
+		Exit();
+		//Pause();
 		//auto m_Sound = std::make_shared<Sound>("Data/Sounds/BgSoundPlay.mp3");
 		/*m_Sound->PlaySound();
-		m_Sound->LoadSound("Data/Sounds/BgSoundPlay.mp3");*/
-		
+		m_Sound->LoadSound("Data/Sounds/BgSoundPlay.mp3");*/	
 		});
 	m_listButton.push_back(btnPlay);
 
@@ -87,18 +86,20 @@ void GSMenu::Init()
 void GSMenu::Exit()
 {
 	ResourceManagers::FreeInstance();
+	m_Sound->StopSound();
+	GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PICKPLAYER);
 }
 
 
 void GSMenu::Pause()
 {
-	m_Sound->StopSound();
-
+	
+	m_Sound->PauseSound();
 }
 
 void GSMenu::Resume()
 {
-	m_Sound->PlaySound();
+	m_Sound->ResumeSound();
 }
 
 

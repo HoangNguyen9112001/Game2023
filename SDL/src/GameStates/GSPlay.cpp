@@ -81,7 +81,8 @@ void GSPlay::Init()
 	button->Set2DPosition(SCREEN_WIDTH - 75, 20);
 	button->SetOnClick([this]() {
 		//GameStateMachine::GetInstance()->PopState();
-		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
+		//GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
+		Exit();
 		});
 	m_listButton.push_back(button);
 
@@ -92,6 +93,7 @@ void GSPlay::Init()
 	button->Set2DPosition(SCREEN_WIDTH - 150, 20);
 	button->SetOnClick([this]() {
 		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PAUSE);
+		Pause();
 		});
 	m_listButton.push_back(button);
 
@@ -116,7 +118,8 @@ void GSPlay::Init()
 	m_endGameButton->SetSize(900, 450);
 	m_endGameButton->SetOnClick([this]() {
 		isGameOver = false;
-		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
+		//GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
+		Exit();
 		});
 
    // Pick Player
@@ -200,18 +203,20 @@ void GSPlay::Init()
 	auto BgSound = std::make_shared<Sound>("Data/Sounds/BgSoundPlay.mp3");
 	BgSound->PlaySound();
 	BgSound->LoadSound("Data/Sounds/BgSoundPlay.mp3");
-
+		
 	m_KeyPress = 0;
 }
 
 void GSPlay::Exit()
 {
-	
+	BgSound->StopSound();
+	GameStateMachine::GetInstance()->ChangeState(StateType::STATE_MENU);
 }
 
 void GSPlay::Pause()
 {
-	BgSound->StopSound();
+	BgSound->PauseSound();
+	//BgSound->StopSound();
 }
 
 void GSPlay::Resume()
@@ -285,12 +290,17 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 	case SDL_MOUSEBUTTONDOWN:
 		if (e.button.button == SDL_BUTTON_LEFT)
 		{
+			auto shooting = std::make_shared<Sound>("Data/Sounds/Shooting.mp3");
+			shooting->LoadSound("Data/Sounds/Shooting.mp3");
+			shooting->PlaySound();
 			for (auto& it : m_listBullets)
 			{
 				int curentTime = SDL_GetTicks();
 				//create bullet
 				if (!it->GetBulletActive())//if no bullet active
 				{
+					//Pause();
+					
 					if (curentTime - m_lastShootTime > m_shootDelay) {
 						it->Set2DPosition(weapon->Get2DPosition().x  + weapon->GetWidth() / 2,
 							weapon->Get2DPosition().y + weapon->GetHeight() / 2);
@@ -507,6 +517,7 @@ void GSPlay::Update(float deltaTime)
 		int seconds = countdown % 60;
 
 
+		
 		min = std::make_shared<Text>("Data/MochiyPopOne.ttf", m_textColor, 14);
 		//TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
 		min->SetSize(50, 50);
@@ -517,7 +528,14 @@ void GSPlay::Update(float deltaTime)
 		//TTF_SizeText(100, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
 		sec->SetSize(50, 50);
 		sec->Set2DPosition(550, 30);
-		sec->LoadFromRenderText(std::to_string(seconds));
+		if (seconds < 10) {
+			sec->LoadFromRenderText("0 " + std::to_string(seconds));
+		}
+		else
+		{
+			sec->LoadFromRenderText(std::to_string(seconds));
+		}
+		
 
 		if (minutes<1 && seconds <1) {
 			isGameOver = true;
