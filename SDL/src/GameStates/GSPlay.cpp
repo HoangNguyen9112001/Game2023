@@ -463,8 +463,7 @@ void GSPlay::Update(float deltaTime)
 							//update scores
 							scores += 5;
 							score->LoadFromRenderText(std::to_string(scores));
-							if (scores > bestScore) 
-								bestScore = scores;
+						
 						}
 					}
 				}
@@ -581,15 +580,17 @@ void GSPlay::Update(float deltaTime)
 		
 
 		if (minutes<1 && seconds <1) {
+			if (scores > bestScore)
+				bestScore = scores;
+			GSPlay::WriteHighScore();
 			isGameOver = true;
 		}
-		if (scores > bestScore) bestScore = scores;
 	}
 
 	if (playerHealth < 1) {
 		if (scores > bestScore)
 			bestScore = scores;
-		WriteHighScore();
+		GSPlay::WriteHighScore();
 		isGameOver = true;
 	}
 
@@ -678,6 +679,7 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 
 	//Show game over
 	if (playerHealth < 1) {
+
 		m_endGameButton->Draw(renderer);
 	}
 	if (isGameOver && playerHealth >= 1) {
