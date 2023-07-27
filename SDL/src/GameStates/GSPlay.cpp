@@ -138,10 +138,10 @@ void GSPlay::Init()
 
 	//player2
 	if (i == 1) {
-		texture = ResourceManagers::GetInstance()->GetTexture("player2.tga");
-		player = std::make_shared<SpriteAnimation>(texture, 1, 2, 8, 0.9f);
+		texture = ResourceManagers::GetInstance()->GetTexture("Asset/Player2.tga");
+		player = std::make_shared<SpriteAnimation>(texture, 1, 6, 1, 0.1f);
 		player->SetFlip(SDL_FLIP_HORIZONTAL);
-		player->SetSize(60, 80);
+		player->SetSize(40, 50);
 		player->Set2DPosition(350, 400);
 		m_listAnimation.push_back(player);
 	}

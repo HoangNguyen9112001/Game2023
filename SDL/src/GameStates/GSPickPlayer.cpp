@@ -42,7 +42,7 @@ void GSPickPlayer::Init()
 	player1->Set2DPosition(border1->Get2DPosition().x + (border1->GetWidth() - player1->GetWidth()) / 2,
 							border1->Get2DPosition().y + (border1->GetHeight() - player1->GetHeight()) / 2);
 	//player2
-	player2 = std::make_shared<SpriteAnimation>(ResourceManagers::GetInstance()->GetTexture("player2.tga"), 1, 2, 8, 0.9f);
+	player2 = std::make_shared<SpriteAnimation>(ResourceManagers::GetInstance()->GetTexture("Asset/Player2.tga"), 1, 6, 1, 0.2f);
 	player2->SetFlip(SDL_FLIP_NONE);
 	player2->SetSize(120, 160);
 	player2->Set2DPosition(border2->Get2DPosition().x + (border2->GetWidth() - player2->GetWidth()) / 2,
