@@ -39,7 +39,7 @@ void GSPause::Init()
 	m_listButton.push_back(button);
 
 	//Sound control
-	m_soundButtonPlay = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("BTNActive/Music_BTN.png"), SDL_FLIP_NONE);
+	/*m_soundButtonPlay = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("BTNActive/Music_BTN.png"), SDL_FLIP_NONE);
 	m_soundButtonPlay->SetSize(70, 70);
 	m_soundButtonPlay->Set2DPosition(m_boder->Get2DPosition().x + 565, m_boder->Get2DPosition().y + 120);
 
@@ -57,12 +57,12 @@ void GSPause::Init()
 		Mix_ResumeMusic();
 		GSPause::SetisPlayingSound(true);
 		});
-	m_listButton.push_back(m_soundButtonOff);
+	m_listButton.push_back(m_soundButtonOff);*/
 
 	//Restart
 	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("BTN/Replay_BTN.png"), SDL_FLIP_NONE);
 	button->SetSize(70, 70);
-	button->Set2DPosition(m_boder->Get2DPosition().x + 375, m_boder->Get2DPosition().y + 120);
+	button->Set2DPosition(m_boder->Get2DPosition().x + 565, m_boder->Get2DPosition().y + 120);
 	button->SetOnClick([this]() {
 		//GameStateMachine::GetInstance()->PopState();
 		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PLAY);
@@ -96,22 +96,33 @@ void	GSPause::HandleEvents()
 void	GSPause::HandleKeyEvents(SDL_Event& e)
 {
 }
+//void	GSPause::HandleEvent(SDL_Event& event) {
+//	if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+//		int mouseX, mouseY;
+//		SDL_GetMouseState(&mouseX, &mouseY);
+//		if (mouseX >= m_soundButtonPlay.x && mouseX <= m_soundButtonPlay.x + m_soundButtonPlay.w &&
+//			mouseY >= buttonRect.y && mouseY <= buttonRect.y + buttonRect.h) {
+//			soundEnabled = !soundEnabled;
+//		}
+//	}
+//}
 void	GSPause::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 {
 	for (auto button : m_listButton)
 	{
 		if (button->HandleTouchEvent(&e))
 		{
+
 			break;
 		}
-		if (GetisPlayingSound())
+		/*if (GetisPlayingSound())
 		{
 			m_soundButtonPlay->HandleTouchEvent(&e);
 		}
 		else
 		{
 			m_soundButtonOff->HandleTouchEvent(&e);
-		}
+		}*/
 	}
 }
 void	GSPause::HandleMouseMoveEvents(int x, int y)
@@ -119,8 +130,8 @@ void	GSPause::HandleMouseMoveEvents(int x, int y)
 }
 void	GSPause::Update(float deltaTime)
 {
-	m_soundButtonOff->Update(deltaTime);
-	m_soundButtonPlay->Update(deltaTime);
+	/*m_soundButtonOff->Update(deltaTime);
+	m_soundButtonPlay->Update(deltaTime);*/
 	
 }
 void	GSPause::Draw(SDL_Renderer* renderer)
@@ -134,14 +145,14 @@ void	GSPause::Draw(SDL_Renderer* renderer)
 		it->Draw(renderer);
 	}
 
-	if (GetisPlayingSound())
+	/*if (GetisPlayingSound())
 	{
 		m_soundButtonPlay->Draw(renderer);
 	}
 	else
 	{
 		m_soundButtonOff->Draw(renderer);
-	}
+	}*/
 	m_textGameSetting->Draw(renderer);
 }
 

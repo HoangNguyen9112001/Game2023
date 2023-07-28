@@ -25,6 +25,8 @@ public:
 	void	Update(float deltaTime) override;
 	void	Draw(SDL_Renderer* renderer) override;
 
+	void	HandleEvent(SDL_Event& e);
+
 	void	SetisPlayingSound(bool isPlaying);
 	bool	GetisPlayingSound();
 	int m_KeyPress;

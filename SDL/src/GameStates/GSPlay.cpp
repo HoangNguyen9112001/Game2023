@@ -95,9 +95,18 @@ void GSPlay::Init()
 	button->Set2DPosition(SCREEN_WIDTH - 150, 20);
 	button->SetOnClick([this]() {
 		GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PAUSE);
-		Pause();
+		//Pause();
 		});
 	m_listButton.push_back(button);
+
+	//button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("BTN/Music_BTN.png"), SDL_FLIP_NONE);
+	//button->SetSize(60, 60);
+	//button->Set2DPosition(SCREEN_WIDTH - 225, 20);
+	//button->SetOnClick([this]() {
+	//	//GameStateMachine::GetInstance()->ChangeState(StateType::STATE_PAUSE);
+	//	Pause();
+	//	});
+	//m_listButton.push_back(button);
 
 	//Victory
 	auto textureVictory = ResourceManagers::GetInstance()->GetTexture("victory3.png");
@@ -239,6 +248,7 @@ void GSPlay::Exit()
 void GSPlay::Pause()
 {
 	BgSound->PauseSound();
+	//Shooting->PauseSound();
 	//BgSound->StopSound();
 }
 
