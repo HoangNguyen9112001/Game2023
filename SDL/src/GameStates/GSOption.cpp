@@ -35,12 +35,13 @@ void GSOption::Init()
 	m_high_score->SetSize(SCREEN_WIDTH, 300);
 	// Reading file HighScore.txt
 	// 
-	FILE* file = fopen("Data/HighScore.txt", "r");
+	FILE* file = NULL;
+	fopen_s(&file,"Data/HighScore.txt", "r");
 	if (file == nullptr)
 	{
 		return;
 	}
-	fscanf(file, "%d",&HighScore);
+	fscanf_s(file, "%d",&HighScore);
 	
 	//Best score
 	SDL_Color m_textColor = { 255, 255, 204 };

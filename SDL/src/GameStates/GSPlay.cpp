@@ -752,7 +752,8 @@ void GSPlay::EnemyAutoMove(std::shared_ptr<SpriteAnimation> e)
 
 void GSPlay::WriteHighScore()
 {
-	FILE* file = fopen("Data/HighScore.txt","w");
+	FILE* file = NULL;
+	fopen_s(&file,"Data/HighScore.txt","w");
 	if (file == nullptr)
 	{
 		return;
