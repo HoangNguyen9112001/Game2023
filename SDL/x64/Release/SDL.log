@@ -1,48 +1,30 @@
-﻿  Game.cpp
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\game.cpp(103): warning C4244: 'argument': conversion from 'double' to 'Uint32', possible loss of data
-  ResourceManagers.cpp
-  Camera.cpp
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\camera.cpp(23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\camera.cpp(24): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\camera.cpp(43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  CMath.cpp
-  Dot.cpp
-  MouseButton.cpp
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\mousebutton.cpp(45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  Renderer.cpp
-  Sound.cpp
-  Sprite2D.cpp
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\sprite2d.cpp(26): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  SpriteAnimation.cpp
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\spriteanimation.cpp(30): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  Text.cpp
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\text.cpp(34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  TextureManager.cpp
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\texturemanager.cpp(89): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\texturemanager.cpp(89): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\texturemanager.cpp(95): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\texturemanager.cpp(96): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\texturemanager.cpp(97): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\texturemanager.cpp(97): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\texturemanager.cpp(98): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gameobject\texturemanager.cpp(98): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-  Timer.cpp
-  GameStateBase.cpp
-  GameStateMachine.cpp
-  GSIntro.cpp
-  GSMenu.cpp
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gamestates\gsmenu.cpp(31): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gamestates\gsmenu.cpp(42): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gamestates\gsmenu.cpp(52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gamestates\gsmenu.cpp(61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gamestates\gsmenu.cpp(73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+﻿  GSOption.cpp
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.h(46,23): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSOption.cpp(50,45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSOption.cpp(38,15): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSOption.cpp(43,2): error C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   GSPlay.cpp
-e:\trainer\sdl2\sdl2project\trainingframework\sdl\src\gamestates\gsplay.cpp(144): warning C4065: switch statement contains 'default' but no 'case' labels
-  main.cpp
-  Generating code
-  1202 of 1206 functions (99.7%) were compiled, the rest were copied from previous compilation.
-    126 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  SDL.vcxproj -> E:\TRainer\SDL2\SDL2Project\TrainingFramework\x64\Release\SDL.exe
-  0 File(s) copied
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.h(46,23): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(8,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(162,62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(206,54): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(206,31): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(411,64): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(411,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(428,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(436,62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(468,83): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(468,66): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(467,100): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(467,82): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(483,99): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(483,77): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(482,119): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(482,97): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(519,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(521,25): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(522,25): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(547,56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(547,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(389,3): warning C4065: switch statement contains 'default' but no 'case' labels
+C:\Users\ADMIN\Desktop\Game2023\SDL\src\GameStates\GSPlay.cpp(755,15): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
