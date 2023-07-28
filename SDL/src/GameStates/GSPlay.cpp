@@ -148,13 +148,13 @@ void GSPlay::Init()
 	
 	//SCORE
 	m_textColor = { 255, 255, 204 };
-	m_score = std::make_shared<Text>("Data/MochiyPopOne.ttf", m_textColor, 20);
-	m_score->SetSize(75, 30);
-	m_score->Set2DPosition((SCREEN_WIDTH - m_score->GetWidth()) / 3, 45);
+	m_score = std::make_shared<Text>("Data/font4.otf", m_textColor, 20);
+	m_score->SetSize(100,70);
+	m_score->Set2DPosition((SCREEN_WIDTH - m_score->GetWidth()) / 3, 30);
 	m_score->LoadFromRenderText("Score: ");
 	
-	score = std::make_shared<Text>("Data/MochiyPopOne.ttf", m_textColor, 14);
-	score->SetSize(50,50);
+	score = std::make_shared<Text>("Data/font4.otf", m_textColor, 14);
+	score->SetSize(50,70);
 	score->Set2DPosition(m_score->Get2DPosition().x + m_score->GetWidth() + 5, 30);
 	score->LoadFromRenderText(std::to_string(scores));
 
@@ -560,16 +560,16 @@ void GSPlay::Update(float deltaTime)
 
 
 		
-		min = std::make_shared<Text>("Data/MochiyPopOne.ttf", m_textColor, 14);
+		min = std::make_shared<Text>("Data/font4.otf", m_textColor, 14);
 		//TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
-		min->SetSize(50, 50);
-		min->Set2DPosition(500, 30);
+		min->SetSize(50, 70);
+		min->Set2DPosition(550, 30);
 		min->LoadFromRenderText(std::to_string(minutes) + ": ");
 
-		sec = std::make_shared<Text>("Data/MochiyPopOne.ttf", m_textColor, 14);
+		sec = std::make_shared<Text>("Data/font4.otf", m_textColor, 14);
 		//TTF_SizeText(100, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
-		sec->SetSize(50, 50);
-		sec->Set2DPosition(550, 30);
+		sec->SetSize(50, 70);
+		sec->Set2DPosition(min->Get2DPosition().x + min->GetWidth()+ 5, 30);
 		if (seconds < 10) {
 			sec->LoadFromRenderText("0 " + std::to_string(seconds));
 		}
