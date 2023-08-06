@@ -2,7 +2,6 @@
 #include "Define.h"
 Renderer::Renderer()
 {
-	WALKING_ANIMATION_FRAMES = 4;
 	gWindow = NULL;
 	gRenderer = NULL;
 	gFont = NULL;
@@ -40,7 +39,7 @@ bool Renderer::Init()
 		}
 
 		//Create window
-		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		gWindow = SDL_CreateWindow("Monster Survivo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		//Renderer::GetInstance()->SetWindow(gWindow);
 		if (gWindow == NULL)
 		{
@@ -126,11 +125,3 @@ SDL_Rect* Renderer::GetSpriteClips()
 	return nullptr;
 }
 
-
-void Renderer::SetSpriteClips(SDL_Rect** mSpriteClips)
-{
-	for (int i = 0; i < WALKING_ANIMATION_FRAMES; i++)
-	{
-		gSpriteClips[i] = mSpriteClips[i];
-	}
-}

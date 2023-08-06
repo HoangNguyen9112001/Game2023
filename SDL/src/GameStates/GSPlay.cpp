@@ -55,7 +55,7 @@ void GSPlay::Init()
 
 	auto texture = ResourceManagers::GetInstance()->GetTexture("Asset/background4.png");
 	m_background = std::make_shared<Sprite2D>( texture, SDL_FLIP_NONE);
-	m_background->SetSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	m_background->SetSize(2 * SCREEN_WIDTH,2 * SCREEN_HEIGHT);
 	m_background->Set2DPosition(0, 0);
 
 	// heart icon
@@ -203,12 +203,12 @@ void GSPlay::Init()
 		enemy = std::make_shared<SpriteAnimation>(texture, 1, 3, 1, 0.9f);
 		enemy->SetFlip(SDL_FLIP_NONE);
 		enemy->SetSize(40, 50);
-		enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT);
+		enemy->Set2DPosition(rand() % 2 * SCREEN_WIDTH, rand() % 2 * SCREEN_HEIGHT);
 		enemy->SetEnemyAlive(true);
 		m_listEnemies.push_back(enemy);
 	}
 
-	//Camera::GetInstance()->SetTarget(obj);
+	Camera::GetInstance()->SetTarget(player);
 	
 
 
@@ -320,7 +320,8 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 		break;
 		//Mouse Motion
 	case SDL_MOUSEMOTION:
-		weaponAngle = atan2(e.motion.y - weapon->Get2DPosition().y, e.motion.x - weapon->Get2DPosition().x) * 180 / M_PI;
+		weaponAngle = atan2(weapon->Get2DPosition().y <= SCREEN_HEIGHT ? e.motion.y - weapon->Get2DPosition().y : 2 * e.motion.y - weapon->Get2DPosition().y,
+			weapon->Get2DPosition().x <= SCREEN_WIDTH ? e.motion.x - weapon->Get2DPosition().x : 2 * e.motion.x - weapon->Get2DPosition().x) * 180 / M_PI;
 		break;
 		//Bullet fly
 	case SDL_MOUSEBUTTONDOWN:
@@ -424,16 +425,16 @@ void GSPlay::Update(float deltaTime)
 				}
 				break;
 			case 2: // Move down
-				if (player->Get2DPosition().y > SCREEN_HEIGHT - player->GetHeight()) {
-					player->Set2DPosition(player->Get2DPosition().x, SCREEN_HEIGHT - player->GetHeight());
+				if (player->Get2DPosition().y >2 * SCREEN_HEIGHT - player->GetHeight()) {
+					player->Set2DPosition(player->Get2DPosition().x, 2 * SCREEN_HEIGHT - player->GetHeight());
 				}
 				else
 					it->MoveDown(deltaTime);
 				break;
 			case 4: // Move right
-				if (player->Get2DPosition().x > SCREEN_WIDTH - player->GetWidth() - 50)
+				if (player->Get2DPosition().x > 2 * SCREEN_WIDTH - player->GetWidth() - 50)
 				{
-					player->Set2DPosition(SCREEN_WIDTH - player->GetWidth() -50, player->Get2DPosition().y);
+					player->Set2DPosition( 2 * SCREEN_WIDTH - player->GetWidth() -50, player->Get2DPosition().y);
 				}
 				else {
 					player->SetFlip(SDL_FLIP_NONE);
@@ -454,7 +455,6 @@ void GSPlay::Update(float deltaTime)
 			it->Update(deltaTime);
 
 		}
-		//time1 += deltaTime;
 		//Update Enemy
 		for (auto& it : m_listEnemies) {
 			GSPlay::EnemyAutoMove(it);
@@ -523,7 +523,7 @@ void GSPlay::Update(float deltaTime)
 
 				it->Set2DPosition(x, y);
 				// Collision with screen
-				if (x < 0 || x > SCREEN_WIDTH || y < 0 || y > SCREEN_HEIGHT)
+				if (x < 0 || x > 2 * SCREEN_WIDTH || y < 0 || y > 2 * SCREEN_HEIGHT)
 				{
 					it->SetBulletActive(false);
 				}
@@ -544,7 +544,7 @@ void GSPlay::Update(float deltaTime)
 				enemy = std::make_shared<SpriteAnimation>(texture, 1, 3, 1, 0.9f);
 				enemy->SetFlip(SDL_FLIP_NONE);
 				enemy->SetSize(40, 50);
-				enemy->Set2DPosition(rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT);
+				enemy->Set2DPosition(rand() % 2 * SCREEN_WIDTH, rand() % 2 * SCREEN_HEIGHT);
 				enemy->SetEnemyAlive(true);
 				m_listEnemies.push_back(enemy);
 			}
@@ -603,30 +603,30 @@ void GSPlay::Update(float deltaTime)
 		GSPlay::WriteHighScore();
 		isGameOver = true;
 	}
-
+	Camera::GetInstance()->Update(deltaTime);
 }
 
-void GSPlay::drawRect(SDL_Renderer* renderer)
-{
-	SDL_Rect hitboxRect;
-	hitboxRect.x = static_cast<int>(player->Get2DPosition().x + 18);
-	hitboxRect.y = static_cast<int>(player->Get2DPosition().y + 17);
-	hitboxRect.w = player->GetWidth() - 36;
-	hitboxRect.h = player->GetHeight() - 37;
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-	SDL_RenderDrawRect(renderer, &hitboxRect);
-}
-
-void GSPlay::drawEnemyRect(SDL_Renderer* renderer)
-{
-	SDL_Rect enemyRect;
-	enemyRect.x = static_cast<int>(enemy->Get2DPosition().x + 11);
-	enemyRect.y = static_cast<int>(enemy->Get2DPosition().y + 10);
-	enemyRect.w = enemy->GetWidth() - 22;
-	enemyRect.h = enemy->GetHeight() - 20;
-	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-	SDL_RenderDrawRect(renderer, &enemyRect);
-}
+//void GSPlay::drawRect(SDL_Renderer* renderer)
+//{
+//	SDL_Rect hitboxRect;
+//	hitboxRect.x = static_cast<int>(player->Get2DPosition().x + 18);
+//	hitboxRect.y = static_cast<int>(player->Get2DPosition().y + 17);
+//	hitboxRect.w = player->GetWidth() - 36;
+//	hitboxRect.h = player->GetHeight() - 37;
+//	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+//	SDL_RenderDrawRect(renderer, &hitboxRect);
+//}
+//
+//void GSPlay::drawEnemyRect(SDL_Renderer* renderer)
+//{
+//	SDL_Rect enemyRect;
+//	enemyRect.x = static_cast<int>(enemy->Get2DPosition().x + 11);
+//	enemyRect.y = static_cast<int>(enemy->Get2DPosition().y + 10);
+//	enemyRect.w = enemy->GetWidth() - 22;
+//	enemyRect.h = enemy->GetHeight() - 20;
+//	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+//	SDL_RenderDrawRect(renderer, &enemyRect);
+//}
 
 void GSPlay::Draw(SDL_Renderer* renderer)
 {

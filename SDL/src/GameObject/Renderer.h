@@ -15,11 +15,9 @@ public:
 	//void SetTTFFont(TTF_Font* mFont);
 	//TTF_Font* GetFont();
 	SDL_Rect* GetSpriteClips();
-	void SetSpriteClips(SDL_Rect** mSpriteClips);
 private:
 	SDL_Window* gWindow;
 	SDL_Renderer* gRenderer;
 	TTF_Font* gFont;
-	 int WALKING_ANIMATION_FRAMES ;
 	SDL_Rect* gSpriteClips[4];
 };

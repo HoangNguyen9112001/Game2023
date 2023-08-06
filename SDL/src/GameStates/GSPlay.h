@@ -26,8 +26,8 @@ public:
 	void	HandleTouchEvents(SDL_Event& e, bool bIsPressed) override;
 	void	HandleMouseMoveEvents(int x, int y) override;
 	void	Update(float deltaTime) override;
-	void	drawRect(SDL_Renderer* renderer);
-	void	drawEnemyRect(SDL_Renderer* renderer);
+	//void	drawRect(SDL_Renderer* renderer);
+	//void	drawEnemyRect(SDL_Renderer* renderer);
 	void	Draw(SDL_Renderer* renderer) override;
 	void	EnemyAutoMove(std::shared_ptr<SpriteAnimation> obj);
 	void    WriteHighScore();
@@ -43,7 +43,7 @@ public:
 
 	Uint32 startTime = SDL_GetTicks();
 	Uint32 currentTime, elapsedTime;
-	int countdown = 0.25 * 60;
+	int countdown = 1 * 60;
 
 	int m_bullet_speed = 20;
 	int m_MouseMotion;
