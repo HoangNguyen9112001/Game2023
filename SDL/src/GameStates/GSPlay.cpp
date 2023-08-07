@@ -18,6 +18,18 @@ float distance(float x1, float y1, float x2, float y2) {
 bool intersect(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2) {
 	return !(x1 > x2 + w2 || x1 + w1 < x2 || y1 > y2 + h2 || y1 + h1 < y2);
 }
+// Calculate algle
+double point_direction(double x1, double y1, double x2, double y2)
+{
+	double angle = atan2(y2 - y1, x2 - x1);
+	// Chuyển đổi góc từ radian sang độ
+	angle = angle * 180 / M_PI;
+	// Đảm bảo góc nằm trong khoảng từ 0 đến 360 độ
+	if (angle < 0)
+		angle += 360;
+
+	return angle;
+}
 
 //variables for decreasing health and flashing sprite during invulnerability period
 bool isInvulnerable = false;
@@ -158,13 +170,13 @@ void GSPlay::Init()
 	//SCORE
 	m_textColor = { 255, 255, 204 };
 	m_score = std::make_shared<Text>("Data/font4.otf", m_textColor, 20);
-	m_score->SetSize(100,70);
-	m_score->Set2DPosition((SCREEN_WIDTH - m_score->GetWidth()) / 3, 30);
+	m_score->SetSize(120,80);
+	m_score->Set2DPosition((SCREEN_WIDTH - m_score->GetWidth()) / 3, 20);
 	m_score->LoadFromRenderText("Score: ");
 	
 	score = std::make_shared<Text>("Data/font4.otf", m_textColor, 14);
-	score->SetSize(50,70);
-	score->Set2DPosition(m_score->Get2DPosition().x + m_score->GetWidth() + 5, 30);
+	score->SetSize(50,80);
+	score->Set2DPosition(m_score->Get2DPosition().x + m_score->GetWidth() + 5, 20);
 	score->LoadFromRenderText(std::to_string(scores));
 
 	//Bullet
@@ -176,25 +188,24 @@ void GSPlay::Init()
 		m_listBullets.push_back(bullet);
 	}
 
-	////gold
-	//m_gold = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("gold_icon.png"), SDL_FLIP_NONE);
-	//m_gold->SetSize(60, 60);
-	//m_gold->Set2DPosition(score->Get2DPosition().x + score->GetWidth() + 50, 20);
+	//gold
+	m_gold = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("gold_icon.png"), SDL_FLIP_NONE);
+	m_gold->SetSize(60, 70);
+	m_gold->Set2DPosition(score->Get2DPosition().x + score->GetWidth() + 50, 30);
 
-	//gold = std::make_shared<Text>("Data/font2.ttf", m_textColor, 14);
-	////TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
-	//gold->SetSize(m_textwidth, m_textheight);
-	//gold->Set2DPosition(m_gold->Get2DPosition().x + m_gold->GetWidth() + 10, 30);
-	//gold->LoadFromRenderText(std::to_string(golds));
+	gold = std::make_shared<Text>("Data/font4.otf", m_textColor, 14);
+	gold->SetSize(50, 80);
+	gold->Set2DPosition(m_gold->Get2DPosition().x + m_gold->GetWidth() + 10, 20);
+	gold->LoadFromRenderText(std::to_string(golds));
 
-	////Guns shop
-	//button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("guns_shop_icon.png"), SDL_FLIP_HORIZONTAL);
-	//button->SetSize(60, 60);
-	//button->Set2DPosition(SCREEN_WIDTH - 230, 20);
-	//button->SetOnClick([this]() {
+	//Guns shop
+	button = std::make_shared<MouseButton>(ResourceManagers::GetInstance()->GetTexture("guns_shop_icon.png"), SDL_FLIP_HORIZONTAL);
+	button->SetSize(60, 60);
+	button->Set2DPosition(SCREEN_WIDTH - 230, 20);
+	button->SetOnClick([this]() {
 
-	//	});
-	//m_listButton.push_back(button);
+		});
+	m_listButton.push_back(button);
 
 	//Enemies
 	for (int i = 0; i < MAX_ENEMIES; ++i) {
@@ -320,8 +331,26 @@ void GSPlay::HandleKeyEvents(SDL_Event& e)
 		break;
 		//Mouse Motion
 	case SDL_MOUSEMOTION:
-		weaponAngle = atan2(weapon->Get2DPosition().y <= SCREEN_HEIGHT ? e.motion.y - weapon->Get2DPosition().y : 2 * e.motion.y - weapon->Get2DPosition().y,
-			weapon->Get2DPosition().x <= SCREEN_WIDTH ? e.motion.x - weapon->Get2DPosition().x : 2 * e.motion.x - weapon->Get2DPosition().x) * 180 / M_PI;
+		// x > && y <
+		if (weapon->Get2DPosition().x >= SCREEN_WIDTH && weapon->Get2DPosition().y < SCREEN_HEIGHT)
+		{
+			weaponAngle = point_direction(weapon->Get2DPosition().x, weapon->Get2DPosition().y, 2 * e.motion.x, e.motion.y);
+		}
+		// x < && y >
+		else if (weapon->Get2DPosition().x < SCREEN_WIDTH && weapon->Get2DPosition().y >= SCREEN_HEIGHT)
+		{
+			weaponAngle = point_direction(weapon->Get2DPosition().x, weapon->Get2DPosition().y, e.motion.x, 2 * e.motion.y);
+		} 
+		// x > && y >
+		else if (weapon->Get2DPosition().x >= SCREEN_WIDTH && weapon->Get2DPosition().y >= SCREEN_HEIGHT)
+		{
+			weaponAngle = point_direction(weapon->Get2DPosition().x, weapon->Get2DPosition().y, 2 * e.motion.x, 2 * e.motion.y);
+		}
+		// x < && y <
+		else
+		{
+			weaponAngle = point_direction(weapon->Get2DPosition().x, weapon->Get2DPosition().y, e.motion.x, e.motion.y);
+		}
 		break;
 		//Bullet fly
 	case SDL_MOUSEBUTTONDOWN:
@@ -399,7 +428,7 @@ void GSPlay::Update(float deltaTime)
 		{
 			// Gun rotation
 			weapon = std::make_shared<Sprite2D>(ResourceManagers::GetInstance()->GetTexture("Asset/gun.png"),
-				playerDirection == 1 ? SDL_FLIP_NONE : SDL_FLIP_VERTICAL);
+				 playerDirection == 1 ? SDL_FLIP_NONE : SDL_FLIP_VERTICAL);
 			weapon->SetRotation(weaponAngle);
 			weapon->SetSize(50, 20);
 
@@ -472,8 +501,9 @@ void GSPlay::Update(float deltaTime)
 							it->SetEnemyAlive(false);
 							//update scores
 							scores += 5;
+							golds += 10;
 							score->LoadFromRenderText(std::to_string(scores));
-						
+							gold->LoadFromRenderText(std::to_string(golds));
 						}
 					}
 				}
@@ -571,15 +601,13 @@ void GSPlay::Update(float deltaTime)
 
 		
 		min = std::make_shared<Text>("Data/font4.otf", m_textColor, 14);
-		//TTF_SizeText(m_font, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
 		min->SetSize(50, 70);
-		min->Set2DPosition(550, 30);
+		min->Set2DPosition(50, m_heartIcon->Get2DPosition().y + m_heartIcon->GetHeight() + 25);
 		min->LoadFromRenderText(std::to_string(minutes) + ": ");
 
 		sec = std::make_shared<Text>("Data/font4.otf", m_textColor, 14);
-		//TTF_SizeText(100, std::to_string(golds).c_str(), &m_textwidth, &m_textheight);
 		sec->SetSize(50, 70);
-		sec->Set2DPosition(min->Get2DPosition().x + min->GetWidth()+ 5, 30);
+		sec->Set2DPosition(min->Get2DPosition().x + min->GetWidth()+ 5, m_heartIcon->Get2DPosition().y + m_heartIcon->GetHeight() + 25);
 		if (seconds < 10) {
 			sec->LoadFromRenderText("0 " + std::to_string(seconds));
 		}
@@ -633,24 +661,17 @@ void GSPlay::Draw(SDL_Renderer* renderer)
 	m_background->Draw(renderer);
 	m_score->Draw(renderer);
 	score->Draw(renderer);
-	/*gold->Draw(renderer);*/
-	/*m_gold->Draw(renderer);*/
+	gold->Draw(renderer);
+	m_gold->DrawOriginal(renderer);
+	
 	weapon->Draw(renderer);
 	min->Draw(renderer);
 	sec->Draw(renderer);
 
 	//Draw heart
-	if (playerHealth > 0)
+	for (int i = 0; i < playerHealth; i++)
 	{
-		m_heartIcons[0]->Draw(renderer);
-	}
-	if (playerHealth > 1)
-	{
-		m_heartIcons[1]->Draw(renderer);
-	}
-	if (playerHealth > 2)
-	{
-		m_heartIcons[2]->Draw(renderer);
+		m_heartIcons[i]->DrawOriginal(renderer);
 	}
 
 	//Render Button

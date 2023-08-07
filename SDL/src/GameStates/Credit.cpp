@@ -57,7 +57,7 @@ void Credit::HandleTouchEvents(SDL_Event& e, bool bIsPressed)
 }
 void Credit::Draw(SDL_Renderer* renderer)
 {
-	cre_background->Draw(renderer);
+	cre_background->DrawOriginal(renderer);
 	//m_score->Draw();
 	for (auto it : cre_btn)
 	{

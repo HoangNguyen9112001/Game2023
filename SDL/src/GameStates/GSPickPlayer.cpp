@@ -1,4 +1,5 @@
 #include "GSPickPlayer.h"
+#include "Camera.h"
 
 int i = 0;
 
@@ -39,14 +40,14 @@ void GSPickPlayer::Init()
 	player1 = std::make_shared<SpriteAnimation>(ResourceManagers::GetInstance()->GetTexture("Asset/Player.tga"), 1, 3, 1, 0.7f);
 	player1->SetFlip(SDL_FLIP_NONE);
 	player1->SetSize(120, 160);
-	player1->Set2DPosition(border1->Get2DPosition().x + (border1->GetWidth() - player1->GetWidth()) / 2,
-							border1->Get2DPosition().y + (border1->GetHeight() - player1->GetHeight()) / 2);
+	player1->Set2DPosition(border1->Get2DPosition().x + (border1->GetWidth() - player1->GetWidth()) / 2 + Camera::GetInstance()->GetPosition().x,
+							border1->Get2DPosition().y + (border1->GetHeight() - player1->GetHeight()) / 2 + Camera::GetInstance()->GetPosition().y);
 	//player2
 	player2 = std::make_shared<SpriteAnimation>(ResourceManagers::GetInstance()->GetTexture("Asset/Player2.tga"), 1, 6, 1, 0.2f);
 	player2->SetFlip(SDL_FLIP_NONE);
 	player2->SetSize(120, 160);
-	player2->Set2DPosition(border2->Get2DPosition().x + (border2->GetWidth() - player2->GetWidth()) / 2,
-							border2->Get2DPosition().y + (border2->GetHeight() - player2->GetHeight()) / 2);
+	player2->Set2DPosition(border2->Get2DPosition().x + (border2->GetWidth() - player2->GetWidth()) / 2 + Camera::GetInstance()->GetPosition().x,
+							border2->Get2DPosition().y + (border2->GetHeight() - player2->GetHeight()) / 2 + Camera::GetInstance()->GetPosition().y);
 	//back to menu
 	std::shared_ptr<MouseButton> button = std::make_shared<MouseButton>(ResourceManagers::
 											GetInstance()->GetTexture("BTN/Backward_BTN.png"), SDL_FLIP_NONE);
@@ -110,7 +111,7 @@ void GSPickPlayer::Update(float deltaTime)
 
 void GSPickPlayer::Draw(SDL_Renderer* renderer)
 {
-	m_background->Draw(renderer);
+	m_background->DrawOriginal(renderer);
 	for (auto& it : m_listButtons)
 	{
 		it->Draw(renderer);

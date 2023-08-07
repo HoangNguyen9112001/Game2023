@@ -156,7 +156,7 @@ void GSMenu::Update(float deltaTime)
 
 void GSMenu::Draw(SDL_Renderer* renderer)
 {
-	m_background->Draw(renderer);
+	m_background->DrawOriginal(renderer);
 	for (auto& it : m_listButton)
 	{
 		it->Draw(renderer);

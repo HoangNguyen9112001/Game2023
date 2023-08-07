@@ -176,10 +176,10 @@
     <ClInclude Include="GSPause.h">
       <Filter>Source Files\GameState</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameStates\GSPickPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\GameStates\GSEndGame.h">
+      <Filter>Source Files\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameStates\GSPickPlayer.h">
       <Filter>Source Files\GameState</Filter>
     </ClInclude>
   </ItemGroup>

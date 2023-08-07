@@ -86,8 +86,8 @@ void	GSOption::Update(float deltaTime)
 void	GSOption::Draw(SDL_Renderer* renderer) 
 {
 
-	opt_bg->Draw(renderer);
-	m_high_score->Draw(renderer);
+	opt_bg->DrawOriginal(renderer);
+	m_high_score->DrawOriginal(renderer);
 	best_score->Draw(renderer);
 	button->Draw(renderer);
 }

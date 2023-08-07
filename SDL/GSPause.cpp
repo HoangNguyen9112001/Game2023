@@ -137,8 +137,8 @@ void	GSPause::Update(float deltaTime)
 void	GSPause::Draw(SDL_Renderer* renderer)
 {
 
-	m_background->Draw(renderer);
-	m_boder->Draw(renderer);
+	m_background->DrawOriginal(renderer);
+	m_boder->DrawOriginal(renderer);
 
 	for (auto& it : m_listButton)
 	{

@@ -54,6 +54,7 @@ public:
 	void UpdateValue(int& value, int upd);
 private:
 	int scores = 0;
+	int golds = 0;
 
 	int m_textwidth = 20,
 		m_textheight = 50;
